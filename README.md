@@ -2,8 +2,6 @@
 
 完整的 AI 基础设施知识体系 — 从硬件到应用的全栈技术指南。
 
-基于 [forceinjection.github.io](https://forceinjection.github.io/) 复刻并持续更新，采用 Astro + React 重新构建，独特的暗夜琥珀主题。
-
 ## 技术栈
 
 - **框架**: Astro 6 + React 19
