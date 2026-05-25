@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths';
 ---
 
 <BaseLayout title="页面未找到">
@@ -8,7 +9,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h1 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">页面未找到</h1>
     <p class="mb-8" style="color: var(--text-secondary)">你访问的页面不存在或已被移动</p>
     <a
-      href="/"
+      href={withBase('/')}
       class="px-6 py-3 rounded-lg font-medium transition-all hover:opacity-90 hover:-translate-y-0.5"
       style="background: var(--accent); color: #fff"
     >

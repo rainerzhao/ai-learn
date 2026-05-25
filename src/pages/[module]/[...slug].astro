@@ -3,6 +3,7 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import TableOfContents from '../../components/TableOfContents';
 import { getCollection, render } from 'astro:content';
 import { getModuleByDir } from '../../lib/modules';
+import { withBase } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ id }) => {
@@ -36,7 +37,7 @@ const tags = entry.data.tags || [];
 const date = entry.data.date || entry.data.last_updated || '';
 
 const breadcrumbs = [
-  { label: moduleInfo?.name || moduleSlug, href: `/${moduleSlug}/` },
+  { label: moduleInfo?.name || moduleSlug, href: withBase(`/${moduleSlug}/`) },
   { label: title },
 ];
 ---

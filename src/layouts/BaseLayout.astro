@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ReadingProgressBar from '../components/ReadingProgressBar';
 import { ClientRouter } from 'astro:transitions';
+import { withBase } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const { title, description = 'AI 基础设施知识体系 — 从硬件到应用的全栈技术指南' } = Astro.props;
+const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
 ---
 
 <!doctype html>
@@ -22,7 +24,7 @@ const { title, description = 'AI 基础设施知识体系 — 从硬件到应用
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&display=swap" />
@@ -37,11 +39,11 @@ const { title, description = 'AI 基础设施知识体系 — 从硬件到应用
       <slot />
     </main>
     <Footer />
-    <script>
+    <script define:vars={{ pagefindScriptSrc }}>
       function loadPagefind() {
-        if (document.querySelector('script[src="/pagefind/pagefind.js"]')) return;
+        if (document.querySelector(`script[src="${pagefindScriptSrc}"]`)) return;
         const script = document.createElement('script');
-        script.src = '/pagefind/pagefind.js';
+        script.src = pagefindScriptSrc;
         script.onload = () => {
           // @ts-ignore
           if (window.pagefind) {

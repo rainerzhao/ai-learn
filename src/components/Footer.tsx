@@ -1,3 +1,5 @@
+import { withBase } from '../lib/paths';
+
 export default function Footer() {
   return (
     <footer className="border-t mt-auto py-8" style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}>
@@ -17,7 +19,7 @@ export default function Footer() {
           </a>
           <span style={{ color: 'var(--border)' }}>|</span>
           <a
-            href="/tags/"
+            href={withBase('/tags/')}
             className="text-xs hover:underline"
             style={{ color: 'var(--accent)' }}
           >

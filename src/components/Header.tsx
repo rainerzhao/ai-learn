@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SearchModal from './SearchModal';
+import { withBase } from '../lib/paths';
 
 interface Module {
   id: string;
@@ -64,7 +65,7 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="/" className="flex items-center gap-2 text-lg font-bold" style={{ color: 'var(--accent)' }}>
+          <a href={withBase('/')} className="flex items-center gap-2 text-lg font-bold" style={{ color: 'var(--accent)' }}>
             <span className="text-2xl">⚡</span>
             <span>AI Fundamentals</span>
           </a>
@@ -95,7 +96,7 @@ export default function Header() {
                   {modules.map(mod => (
                     <a
                       key={mod.id}
-                      href={`/${mod.dirName}/`}
+                      href={withBase(`/${mod.dirName}/`)}
                       className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--bg-card-hover)]"
                       style={{ color: 'var(--text-primary)' }}
                     >
@@ -107,7 +108,7 @@ export default function Header() {
               )}
             </div>
 
-            <a href="/tags/" className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+            <a href={withBase('/tags/')} className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
               标签
             </a>
 
@@ -169,7 +170,7 @@ export default function Header() {
               {modules.map(mod => (
                 <a
                   key={mod.id}
-                  href={`/${mod.dirName}/`}
+                  href={withBase(`/${mod.dirName}/`)}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm"
                   style={{ color: 'var(--text-primary)' }}
                   onClick={() => setMenuOpen(false)}
@@ -180,7 +181,7 @@ export default function Header() {
               ))}
             </div>
             <div className="flex items-center gap-4 mt-4 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-              <a href="/tags/" className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+              <a href={withBase('/tags/')} className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                 标签
               </a>
               <button onClick={toggleTheme} className="text-sm" style={{ color: 'var(--text-secondary)' }}>

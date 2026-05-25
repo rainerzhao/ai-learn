@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
 
 const articles = await getCollection('articles');
 
@@ -25,7 +26,7 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
       <div class="flex flex-wrap gap-3">
         {sortedTags.map(([tag, count]) => (
           <a
-            href={`/tags/${encodeURIComponent(tag)}/`}
+            href={withBase(`/tags/${encodeURIComponent(tag)}/`)}
             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:scale-105"
             style="background: var(--bg-card); border: 1px solid var(--border); color: var(--accent)"
           >

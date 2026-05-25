@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { getModules, type Module } from './modules';
+import { withBase } from './paths';
 
 export interface NavArticle {
   slug: string;
@@ -63,14 +64,14 @@ function buildTree(dir: string, basePath: string): (NavSection | NavArticle)[] {
     const title = fs.existsSync(indexPath) ? getTitleFromFile(indexPath) : d.name.replace(/[-_]/g, ' ');
 
     const subChildren = buildTree(childPath, childBase);
-    const section: NavSection = { slug: d.name, title, href: childBase, children: subChildren };
+    const section: NavSection = { slug: d.name, title, href: withBase(childBase), children: subChildren };
     children.push(section);
   }
 
   for (const f of mdFiles.sort((a, b) => a.name.localeCompare(b.name))) {
     const filePath = path.join(dir, f.name);
     const slug = f.name.replace(/\.md$/, '');
-    const href = `${basePath}/${slug}`;
+    const href = withBase(`${basePath}/${slug}`);
     const title = getTitleFromFile(filePath);
     const tags = getTagsFromFile(filePath);
     children.push({ slug, title, href, tags });
@@ -86,13 +87,13 @@ export function buildNavigation(): NavModule[] {
   return modules.map(mod => {
     const moduleDir = path.join(contentRoot, mod.dirName);
     if (!fs.existsSync(moduleDir)) {
-      return { slug: mod.dirName, title: mod.name, href: `/${mod.dirName}`, children: [], module: mod, articleCount: 0 };
+      return { slug: mod.dirName, title: mod.name, href: withBase(`/${mod.dirName}`), children: [], module: mod, articleCount: 0 };
     }
 
     const children = buildTree(moduleDir, `/${mod.dirName}`);
     const articleCount = countArticles(children);
 
-    return { slug: mod.dirName, title: mod.name, href: `/${mod.dirName}`, children, module: mod, articleCount };
+    return { slug: mod.dirName, title: mod.name, href: withBase(`/${mod.dirName}`), children, module: mod, articleCount };
   });
 }
 
