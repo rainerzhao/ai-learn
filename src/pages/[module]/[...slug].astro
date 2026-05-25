@@ -1,0 +1,51 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import TableOfContents from '../../components/TableOfContents';
+import { getCollection, render } from 'astro:content';
+import { getModuleByDir } from '../../lib/modules';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ id }) => {
+    const parts = id.split('/');
+    return parts.length >= 2 && !parts[parts.length - 1].endsWith('index');
+  });
+
+  return articles.map(entry => {
+    const parts = entry.id.split('/');
+    const moduleSlug = parts[0];
+    const slug = parts.slice(1).join('/');
+
+    return {
+      params: { module: moduleSlug, slug },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const parts = entry.id.split('/');
+const moduleSlug = parts[0];
+const moduleInfo = getModuleByDir(moduleSlug);
+
+// Title: use frontmatter, then first H1 heading, then slug
+const h1 = headings?.find((h: any) => h.depth === 1);
+const title = entry.data.title || h1?.text || entry.id.split('/').pop()?.replace(/[-_]/g, ' ') || 'Untitled';
+const tags = entry.data.tags || [];
+const date = entry.data.date || entry.data.last_updated || '';
+
+const breadcrumbs = [
+  { label: moduleInfo?.name || moduleSlug, href: `/${moduleSlug}/` },
+  { label: title },
+];
+---
+
+<ArticleLayout title={title} breadcrumbs={breadcrumbs} tags={tags} date={date ? String(date) : undefined}>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-8">
+    <div>
+      <Content />
+    </div>
+    <TableOfContents headings={headings || []} />
+  </div>
+</ArticleLayout>

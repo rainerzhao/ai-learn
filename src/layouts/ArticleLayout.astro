@@ -1,0 +1,51 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  breadcrumbs: BreadcrumbItem[];
+  tags?: string[];
+  date?: string;
+}
+
+const { title, description, breadcrumbs, tags = [], date } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <article class="prose mt-6">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-4" style="color: var(--text-primary)">{title}</h1>
+        <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted)">
+          {date && <time datetime={date}>{date}</time>}
+          {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {tags.map(tag => (
+                <a
+                  href={`/tags/${encodeURIComponent(tag)}`}
+                  class="px-2 py-0.5 rounded text-xs font-medium"
+                  style="background: var(--bg-secondary); color: var(--accent); border: 1px solid var(--border)"
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </header>
+
+      <div class="article-content">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

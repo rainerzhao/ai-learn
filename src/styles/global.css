@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #fefce8;
+  --bg-secondary: #fef9c3;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fffbeb;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #78716c;
+  --accent: #d97706;
+  --accent-hover: #b45309;
+  --secondary: #dc2626;
+  --border: #e7e5e4;
+  --code-bg: #f5f5f4;
+}
+
+.dark {
+  --bg-primary: #0f1117;
+  --bg-secondary: #1a1c2e;
+  --bg-card: #1e2030;
+  --bg-card-hover: #252840;
+  --text-primary: #e4e4e7;
+  --text-secondary: #a1a1aa;
+  --text-muted: #8b8b94;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --secondary: #ef4444;
+  --border: #2e3048;
+  --code-bg: #151722;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(245,158,11,0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+  line-height: 1.7;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+code {
+  background: var(--code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+}
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border-radius: 0 6px 6px 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+.font-display {
+  font-family: 'Ma Shan Zheng', cursive;
+}
+
+/* Article prose styles */
+.prose {
+  max-width: 72ch;
+}
+
+.prose h1 { font-size: 2rem; margin: 2rem 0 1rem; }
+.prose h2 { font-size: 1.5rem; margin: 1.75rem 0 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+.prose h3 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
+.prose p { margin: 0.75rem 0; }
+.prose ul, .prose ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.prose li { margin: 0.3rem 0; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Image styles */
+.prose img {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+/* Pagefind overrides */
+.pagefind-ui__result-inner {
+  color: var(--text-primary) !important;
+}
+.pagefind-ui__result-title {
+  color: var(--accent) !important;
+}
+.pagefind-ui__result-excerpt {
+  color: var(--text-secondary) !important;
+}
+.pagefind-ui__search-input {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+}
+.pagefind-ui mark {
+  background: rgba(245,158,11,0.3) !important;
+  color: var(--text-primary) !important;
+}
+.pagefind-ui__result-link {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+}
+.pagefind-ui__result-tag {
+  background: var(--bg-secondary) !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--border) !important;
+}

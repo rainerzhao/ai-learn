@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  const tagSet = new Set<string>();
+
+  for (const article of articles) {
+    const tags = article.data.tags || [];
+    for (const tag of tags) {
+      tagSet.add(tag);
+    }
+  }
+
+  return [...tagSet].map(tag => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const articles = await getCollection('articles', ({ data }) => {
+  return (data.tags || []).includes(tag);
+});
+
+const sorted = articles.sort((a, b) => {
+  const da = a.data.date ? new Date(a.data.date).getTime() : 0;
+  const db = b.data.date ? new Date(b.data.date).getTime() : 0;
+  return db - da;
+});
+---
+
+<BaseLayout title={`标签: ${tag}`} description={`标签 "${tag}" 下的所有文章`}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <a href="/tags/" class="text-sm mb-4 inline-block" style="color: var(--accent)">← 返回标签索引</a>
+
+    <h1 class="text-2xl font-bold mb-6" style="color: var(--text-primary)">
+      标签：{tag}
+      <span class="text-sm font-normal ml-2" style="color: var(--text-muted)">
+        {sorted.length} 篇文章
+      </span>
+    </h1>
+
+    <div class="space-y-2">
+      {sorted.map(article => {
+        const parts = article.id.split('/');
+        const moduleSlug = parts[0];
+        const href = '/' + article.id;
+        const title = article.data.title || article.id.split('/').pop()?.replace(/[-_]/g, ' ') || 'Untitled';
+
+        return (
+          <a
+            href={href}
+            class="block p-3 rounded-lg transition-all hover:translate-x-1"
+            style="background: var(--bg-card); border-left: 3px solid var(--accent); color: var(--text-primary)"
+          >
+            <div class="font-medium text-sm">{title}</div>
+            <div class="text-xs mt-1" style="color: var(--text-muted)">
+              {moduleSlug}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>

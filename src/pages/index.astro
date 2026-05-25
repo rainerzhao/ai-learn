@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection';
+import ModuleCard, { MODULE_ACCENTS } from '../components/ModuleCard';
+import { buildNavigation, type NavSection, type NavArticle } from '../lib/navigation';
+
+const nav = buildNavigation();
+const totalArticles = nav.reduce((sum, m) => sum + m.articleCount, 0);
+
+function getModuleTags(mod: typeof nav[number]): string[] {
+  const tagSet = new Set<string>();
+  function collect(children: (NavSection | NavArticle)[]) {
+    for (const child of children) {
+      if ('tags' in child && child.tags) child.tags.forEach(t => tagSet.add(t));
+      if ('children' in child) collect(child.children);
+    }
+  }
+  collect(mod.children);
+  return [...tagSet].slice(0, 4);
+}
+---
+
+<BaseLayout title="AI Fundamentals" description="完整的 AI 基础设施知识体系 — 从硬件到应用的全栈技术指南">
+  <HeroSection moduleCount={nav.length} articleCount={totalArticles} client:load />
+
+  <section id="modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl font-extrabold mb-2" style="color: var(--text-primary)">
+        核心知识体系
+      </h2>
+      <p style="color: var(--text-secondary)">
+        系统化 AI 技术体系，从芯片底层到智能应用，深入每个技术层次
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {nav.map((mod, i) => (
+        <ModuleCard
+          icon={mod.module.icon}
+          num={mod.module.id}
+          title={mod.module.name}
+          description={mod.module.description}
+          href={mod.href}
+          articleCount={mod.articleCount}
+          tags={getModuleTags(mod)}
+          accentColor={MODULE_ACCENTS[i % MODULE_ACCENTS.length]}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

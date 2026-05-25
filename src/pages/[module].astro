@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs';
+import ArticleTree from '../components/ArticleTree';
+import { buildNavigation, flattenArticles, type NavArticle } from '../lib/navigation';
+import { getModuleByDir } from '../lib/modules';
+
+export function getStaticPaths() {
+  const nav = buildNavigation();
+  return nav.map(mod => ({
+    params: { module: mod.slug },
+    props: { mod },
+  }));
+}
+
+const { mod } = Astro.props;
+const moduleInfo = getModuleByDir(mod.slug);
+const articles = flattenArticles(mod.children);
+---
+
+<BaseLayout title={mod.title} description={moduleInfo?.description}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumbs items={[{ label: mod.title }]} />
+
+    <!-- 模块 Hero -->
+    <div class="mb-8 p-6 rounded-xl relative overflow-hidden" style="background: var(--bg-card); border: 1px solid var(--border)">
+      <div class="absolute top-0 right-0 text-[120px] leading-none opacity-5 select-none" aria-hidden="true">{moduleInfo?.icon}</div>
+      <div class="relative">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-4xl">{moduleInfo?.icon}</span>
+          <h1 class="text-2xl font-bold" style="color: var(--text-primary)">{mod.title}</h1>
+        </div>
+        <p class="mb-4 text-base" style="color: var(--text-secondary)">{moduleInfo?.description}</p>
+        <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold" style="background: var(--accent); color: #0f1117">
+          共 {mod.articleCount} 篇文章
+        </span>
+      </div>
+    </div>
+
+    <!-- 学习路线 + 知识点推荐 -->
+    {moduleInfo && (moduleInfo.learning_path.length > 0 || moduleInfo.highlights.length > 0) && (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {moduleInfo.learning_path.length > 0 && (
+          <div class="p-5 rounded-xl" style="background: var(--bg-card); border: 1px solid var(--border)">
+            <h2 class="text-base font-bold mb-4 flex items-center gap-2" style="color: var(--accent)">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+              学习路线
+            </h2>
+            <div class="space-y-3">
+              {moduleInfo.learning_path.map((step, i) => (
+                <div class="flex gap-3 items-start">
+                  <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background: var(--accent); color: #0f1117">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <div class="font-medium text-sm" style="color: var(--text-primary)">{step.step}</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-muted)">{step.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {moduleInfo.highlights.length > 0 && (
+          <div class="p-5 rounded-xl" style="background: var(--bg-card); border: 1px solid var(--border)">
+            <h2 class="text-base font-bold mb-4 flex items-center gap-2" style="color: var(--accent)">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              核心知识点
+            </h2>
+            <div class="flex flex-wrap gap-2">
+              {moduleInfo.highlights.map((hl: string) => (
+                <span class="px-3 py-1.5 rounded-lg text-xs font-medium" style="background: var(--bg-secondary); color: var(--accent); border: 1px solid var(--border)">
+                  {hl}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- 文章目录 + 全部文章 -->
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+      <aside>
+        <h2 class="text-sm font-bold mb-3 uppercase tracking-wider" style="color: var(--text-muted)">文章目录</h2>
+        <ArticleTree items={mod.children} />
+      </aside>
+
+      <div>
+        <h2 class="text-sm font-bold mb-3 uppercase tracking-wider" style="color: var(--text-muted)">全部文章</h2>
+        <div class="space-y-2">
+          {articles.map((article: NavArticle) => (
+            <a
+              href={article.href}
+              class="block p-3 rounded-lg transition-all hover:translate-x-1"
+              style="background: var(--bg-card); border-left: 3px solid var(--accent); color: var(--text-primary)"
+            >
+              <div class="font-medium text-sm">{article.title}</div>
+              {article.tags.length > 0 && (
+                <div class="flex gap-1.5 mt-1.5">
+                  {article.tags.slice(0, 3).map((tag: string) => (
+                    <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" style="background: var(--bg-secondary); color: var(--accent)">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
