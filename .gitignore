@@ -27,10 +27,3 @@ public/pagefind/
 
 # Old data
 _data/crawl_progress.db
-
-# Large binary files (not needed for web)
-*.pptx
-*.ppt
-*.mp4
-*.mov
-*.avi
