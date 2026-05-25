@@ -76,7 +76,7 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
             开始探索 →
           </a>
           <a
-            href="https://github.com/rainerzhao"
+            href="https://github.com/rainerzhao/ai-learn"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-6 py-2.5 rounded-lg font-bold text-sm transition-all hover:-translate-y-0.5"

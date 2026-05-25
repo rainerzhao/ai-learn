@@ -130,7 +130,7 @@ export default function Header() {
             </button>
 
             <a
-              href="https://github.com/rainerzhao"
+              href="https://github.com/rainerzhao/ai-learn"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg transition-colors"

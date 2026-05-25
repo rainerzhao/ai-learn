@@ -9,7 +9,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center justify-center gap-4 mt-3">
           <a
-            href="https://github.com/rainerzhao"
+            href="https://github.com/rainerzhao/ai-learn"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs hover:underline"
