@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import rehypeRemoveFirstH1 from './src/lib/rehype-remove-first-h1';
 
 export default defineConfig({
+  base: '/ai-learn',
   integrations: [
     react(),
     tailwind(),
