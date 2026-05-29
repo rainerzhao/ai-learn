@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && npx pagefind --site dist --force-language zh",
+    "build": "astro build && node scripts/copy-course-assets.mjs && npx pagefind --site dist --force-language zh",
     "preview": "astro preview"
   },
   "dependencies": {

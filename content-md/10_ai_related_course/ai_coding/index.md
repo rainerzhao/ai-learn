@@ -17,7 +17,9 @@
 
 ### 2.2 交互式演示
 
-- **主演示页面** - AI 编程概念可视化展示
+- **[主演示页面](/ai-learn/course-assets/10_ai_related_course/ai_coding/index.html)** - AI 编程概念可视化展示
+- **[第 1 页演示](/ai-learn/course-assets/10_ai_related_course/ai_coding/page_1.html)** - 可直接进入单页演示内容
 
 ## 3. 相关资源
 
+构建站点时，课程中的 HTML、脚本和媒体资源会发布到 `course-assets`，用于保留原始演示文稿体验。

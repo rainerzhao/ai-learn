@@ -1,7 +1,65 @@
 import { useState, useEffect, useRef } from 'react';
+import { withBase } from '../lib/paths';
+
+interface SearchResult {
+  id: string;
+  url: string;
+  meta: {
+    title?: string;
+  };
+  excerpt: string;
+}
+
+type SearchStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
+
+declare global {
+  interface Window {
+    pagefind?: {
+      init?: () => Promise<void> | void;
+      options?: (options: Record<string, unknown>) => void;
+      search: (query: string) => Promise<{
+        results: Array<{
+          id: string;
+          data: () => Promise<SearchResult>;
+        }>;
+      }>;
+    };
+    __pagefindLoading?: Promise<void>;
+  }
+}
+
+const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
+
+function loadPagefind(): Promise<void> {
+  if (window.pagefind) return Promise.resolve();
+  if (window.__pagefindLoading) return window.__pagefindLoading;
+
+  window.__pagefindLoading = new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${pagefindScriptSrc}"]`);
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('Pagefind failed to load')), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = pagefindScriptSrc;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Pagefind failed to load'));
+    document.head.appendChild(script);
+  }).then(async () => {
+    if (window.pagefind?.init) await window.pagefind.init();
+    window.pagefind?.options?.({ language: 'zh' });
+  });
+
+  return window.__pagefindLoading;
+}
 
 export default function SearchModal() {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<SearchStatus>('idle');
+  const [results, setResults] = useState<SearchResult[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +91,49 @@ export default function SearchModal() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setStatus('idle');
+      setResults([]);
+      return;
+    }
+
+    let cancelled = false;
+    setStatus('loading');
+
+    const timer = window.setTimeout(async () => {
+      try {
+        await loadPagefind();
+        const search = await window.pagefind?.search(trimmed);
+        const data = await Promise.all((search?.results ?? []).slice(0, 8).map(result => result.data()));
+
+        if (cancelled) return;
+        setResults(data);
+        setStatus(data.length > 0 ? 'ready' : 'empty');
+      } catch {
+        if (!cancelled) {
+          setResults([]);
+          setStatus('error');
+        }
+      }
+    }, 180);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [open, query]);
+
+  function closeSearch() {
+    setOpen(false);
+    setQuery('');
+    setResults([]);
+    setStatus('idle');
+  }
 
   return (
     <>
@@ -71,6 +172,8 @@ export default function SearchModal() {
                 ref={inputRef}
                 id="pagefind-search-input"
                 type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
                 placeholder="搜索文章..."
                 className="flex-1 bg-transparent outline-none text-base"
                 style={{ color: 'var(--text-primary)' }}
@@ -78,10 +181,53 @@ export default function SearchModal() {
               <kbd className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>ESC</kbd>
             </div>
             <div id="pagefind-search-results" className="max-h-[60vh] overflow-y-auto p-2">
-	              <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
-	                输入关键词搜索文章...
-	              </div>
-	            </div>
+              {status === 'idle' && (
+                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+                  输入关键词搜索文章...
+                </div>
+              )}
+
+              {status === 'loading' && (
+                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+                  搜索中...
+                </div>
+              )}
+
+              {status === 'empty' && (
+                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+                  没有找到相关内容
+                </div>
+              )}
+
+              {status === 'error' && (
+                <div className="text-center py-8" style={{ color: 'var(--secondary)' }}>
+                  搜索索引暂时不可用
+                </div>
+              )}
+
+              {status === 'ready' && (
+                <div className="space-y-1">
+                  {results.map(result => (
+                    <a
+                      key={result.id}
+                      href={withBase(result.url)}
+                      onClick={closeSearch}
+                      className="block rounded-lg px-3 py-2 transition-colors hover:bg-[var(--bg-card-hover)]"
+                      style={{ color: 'var(--text-primary)' }}
+                    >
+                      <div className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>
+                        {result.meta.title || result.url}
+                      </div>
+                      <div
+                        className="mt-1 text-xs leading-5"
+                        style={{ color: 'var(--text-secondary)' }}
+                        dangerouslySetInnerHTML={{ __html: result.excerpt }}
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

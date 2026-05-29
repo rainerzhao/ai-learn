@@ -1,19 +1,20 @@
-# AI 基础设施课程
+# AI Infra 入门级课程
 
 ## 1. 概述
 
-本目录包含 AI 基础设施相关的课程内容，以 PPT 演示文稿的形式提供系统性的学习材料。
+本课程面向 AI Infra 初学者，用一套讲稿和交互式演示串起硬件、集群、训练、推理、平台与应用层的核心概念。适合作为团队内部分享、训练营第一课或自学路线的入口。
 
 ## 2. 课程内容
 
 ### 2.1 核心文档
 
 - **[讲稿](./讲稿.md)** - 详细的课程讲稿内容
+- **[PPT 大纲](./AI%20Infra%20课程%20PPT%20大纲.md)** - 演示结构与逐页讲解线索
 
 ### 2.2 演示材料
 
-- **[课程 PPT](./index.html)** - 交互式 PPT 演示文稿（共 34 页）
-- **[GPU vs CPU 演示视频](./《流言终结者》演示：GPU与CPU对比.mp4.md)** - 生动展示 GPU 与 CPU 性能差异的视频材料
+- **[课程 PPT](/ai-learn/course-assets/10_ai_related_course/ai_infra_course/入门级/index.html)** - 交互式 PPT 演示文稿
+- **[GPU vs CPU 演示视频](/ai-learn/course-assets/10_ai_related_course/ai_infra_course/入门级/《流言终结者》演示：GPU与CPU对比.mp4)** - 展示 GPU 与 CPU 性能差异的视频材料
 
 ### 2.3 品牌资源
 
@@ -28,12 +29,9 @@
 
 ## 4. 使用方法
 
-### 4.1 在线浏览
+### 4.1 在线浏览与演示
 
-```bash
-# 在浏览器中打开 index.html
-open index.html
-```
+打开上面的课程 PPT 链接即可在线浏览演示文稿。构建站点时，课程 HTML、脚本、图片和视频会复制到 `course-assets`，避免 Markdown 页面与原始演示文稿路径互相覆盖。
 
 ### 4.2 PPT 模式
 

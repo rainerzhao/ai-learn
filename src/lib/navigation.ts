@@ -3,6 +3,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { getModules, type Module } from './modules';
 import { withBase } from './paths';
+import { EXCLUDED_CONTENT_DIRS, EXCLUDED_CONTENT_FILES } from './content-filters';
 
 export interface NavArticle {
   slug: string;
@@ -23,7 +24,7 @@ export interface NavModule extends NavSection {
   articleCount: number;
 }
 
-const EXCLUDE_DIRS = new Set(['assets', 'images', 'img', 'code', 'scripts', 'demo', '.dSYM', 'references']);
+const collator = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
 
 function getTitleFromFile(filePath: string): string {
   try {
@@ -54,10 +55,12 @@ function buildTree(dir: string, basePath: string): (NavSection | NavArticle)[] {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const children: (NavSection | NavArticle)[] = [];
 
-  const dirs = entries.filter(e => e.isDirectory() && !EXCLUDE_DIRS.has(e.name));
-  const mdFiles = entries.filter(e => e.isFile() && e.name.endsWith('.md') && e.name !== 'index.md');
+  const dirs = entries.filter(e => e.isDirectory() && !EXCLUDED_CONTENT_DIRS.has(e.name));
+  const mdFiles = entries.filter(
+    e => e.isFile() && e.name.endsWith('.md') && e.name !== 'index.md' && !EXCLUDED_CONTENT_FILES.has(e.name),
+  );
 
-  for (const d of dirs.sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const d of dirs.sort((a, b) => collator.compare(a.name, b.name))) {
     const childPath = path.join(dir, d.name);
     const childBase = `${basePath}/${d.name}`;
     const indexPath = path.join(childPath, 'index.md');
@@ -68,7 +71,7 @@ function buildTree(dir: string, basePath: string): (NavSection | NavArticle)[] {
     children.push(section);
   }
 
-  for (const f of mdFiles.sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const f of mdFiles.sort((a, b) => collator.compare(a.name, b.name))) {
     const filePath = path.join(dir, f.name);
     const slug = f.name.replace(/\.md$/, '');
     const href = withBase(`${basePath}/${slug}`);
