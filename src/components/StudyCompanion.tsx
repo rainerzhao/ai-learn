@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 
 type CompanionMode = 'reading' | 'quiet' | 'help';
 
+const MODE_HELP: Record<CompanionMode, string> = {
+  reading: '陪读：轮播学习建议',
+  quiet: '安静：只保留猫咪',
+  help: '求助：打开搜索入口',
+};
+
 const TIPS = [
   {
     text: '第一次来？从 GPU 基础和 CUDA 开始会顺很多。',
@@ -123,13 +129,13 @@ export default function StudyCompanion() {
       </button>
 
       <div className="study-companion__controls">
-        <button type="button" className={mode === 'reading' ? 'is-active' : ''} onClick={() => switchMode('reading')}>
+        <button type="button" title={MODE_HELP.reading} className={mode === 'reading' ? 'is-active' : ''} onClick={() => switchMode('reading')}>
           陪读
         </button>
-        <button type="button" className={mode === 'quiet' ? 'is-active' : ''} onClick={() => switchMode('quiet')}>
+        <button type="button" title={MODE_HELP.quiet} className={mode === 'quiet' ? 'is-active' : ''} onClick={() => switchMode('quiet')}>
           安静
         </button>
-        <button type="button" className={mode === 'help' ? 'is-active' : ''} onClick={() => switchMode('help')}>
+        <button type="button" title={MODE_HELP.help} className={mode === 'help' ? 'is-active' : ''} onClick={() => switchMode('help')}>
           求助
         </button>
         <button type="button" onClick={hide} aria-label="隐藏学习伙伴">

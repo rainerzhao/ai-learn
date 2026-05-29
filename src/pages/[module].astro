@@ -16,6 +16,47 @@ export function getStaticPaths() {
 const { mod } = Astro.props;
 const moduleInfo = getModuleByDir(mod.slug);
 const articles = flattenArticles(mod.children);
+
+const RECOMMENDED_BY_MODULE: Record<string, string[][]> = {
+  '01_hardware_architecture': [
+    ['understand_gpu_architecture/01_gpu_characteristics', 'understand_gpu_architecture/02_gpu_memory'],
+    ['nvlink/nvlink_intro', 'pcie/01_pcie_comprehensive_guide'],
+    ['gpudirect/01_gpudirect_technology', 'gpudirect/02_gpudirect_p2p'],
+  ],
+  '02_gpu_programming': [
+    ['02_cuda/01_gpu_programming_introduction', '02_cuda/02_cuda_cores'],
+    ['02_cuda/03_cuda_streams', '04_profiling/01_nvbandwidth_best_practices'],
+    ['03_tilelang/01_tilelang_quick_start'],
+  ],
+  '03_ai_cluster_operations': [
+    ['01_gpu_ops/03_nvidia_smi_guide', '01_gpu_ops/02_gpu_utilization_myth'],
+    ['02_infiniband/01_ib_network_theory'],
+    ['03_nccl/01_nccl_tutorial'],
+  ],
+  '07_rag_and_tools': [
+    ['rag_basics/rag_comparison', 'rag_basics/chinese_rag_embedding_model_selection'],
+    ['knowledge_graph/neo4j_cypher_tutorial', 'graph_rag/graph_rag_learning_guide'],
+    ['pdf_tools/miner_u_intro', 'pdf_tools/marker_zh_cn'],
+  ],
+  '08_agentic_system': [
+    ['concepts/12-factor-agents-intro', 'agent_design/docs/react-agent'],
+    ['multi_agent/docs/part1_multi_agent_ai_fundamentals', 'multi_agent/docs/part2_enterprise_multi_agent_system_implementation'],
+    ['mcp/docs/01_deep_dive_into_mcp_and_the_future_of_ai_tooling', 'memory/research/theory/ai-agent-memory-theory'],
+  ],
+  '09_inference_system': [
+    ['kv_cache/01_concepts/basic/kv_cache_原理简介', 'memory_calc/memory_analysis'],
+    ['vllm/module_analysis/vllm_attention_mha_mla_nsa', 'vllm/module_analysis/vllm_hybrid_kv_cache_manager_deep_dive'],
+    ['kv_cache/01_concepts/prefix_caching/prefix_caching', 'kv_cache/01_concepts/advanced/kv_offloading_analysis'],
+  ],
+};
+
+function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
+  const fragments = RECOMMENDED_BY_MODULE[mod.slug]?.[stepIndex] ?? [];
+  return fragments
+    .map(fragment => articles.find(article => article.href.includes(fragment)))
+    .filter(Boolean)
+    .slice(0, 2) as NavArticle[];
+}
 ---
 
 <BaseLayout title={mod.title} description={moduleInfo?.description}>
@@ -47,7 +88,9 @@ const articles = flattenArticles(mod.children);
               学习路线
             </h2>
             <div class="space-y-3">
-              {moduleInfo.learning_path.map((step, i) => (
+              {moduleInfo.learning_path.map((step, i) => {
+                const recommended = recommendedArticlesForStep(i);
+                return (
                 <div class="flex gap-3 items-start">
                   <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background: var(--accent); color: #0f1117">
                     {i + 1}
@@ -55,9 +98,23 @@ const articles = flattenArticles(mod.children);
                   <div>
                     <div class="font-medium text-sm" style="color: var(--text-primary)">{step.step}</div>
                     <div class="text-xs mt-0.5" style="color: var(--text-muted)">{step.desc}</div>
+                    {recommended.length > 0 && (
+                      <div class="mt-2 flex flex-wrap gap-1.5">
+                        {recommended.map((article: NavArticle) => (
+                          <a
+                            href={article.href}
+                            class="inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
+                            style="background: var(--bg-secondary); color: var(--accent); border: 1px solid var(--border)"
+                          >
+                            {article.title}
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -21,7 +21,7 @@ export default function ModuleCard({ icon, num, title, description, href, articl
   return (
     <a
       href={href}
-      className="group block rounded-lg p-5 transition-all duration-200 hover:-translate-y-0.5"
+      className="group flex h-full flex-col rounded-lg p-5 transition-all duration-200 hover:-translate-y-0.5"
       style={{
         background: 'var(--bg-card)',
         border: '1.5px solid var(--border)',
@@ -37,7 +37,7 @@ export default function ModuleCard({ icon, num, title, description, href, articl
       />
       <div
         className="grid place-items-center w-10 h-10 rounded-lg mb-3 text-2xl leading-none"
-        style={{ background: darkModeTagBg(accentColor) }}
+        style={{ background: accentBg(accentColor) }}
       >
         {icon}
       </div>
@@ -46,14 +46,14 @@ export default function ModuleCard({ icon, num, title, description, href, articl
       </div>
       <div className="font-bold text-base mb-2" style={{ color: 'var(--text-primary)' }}>{title}</div>
       <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>{description}</p>
-      <div className="flex items-center justify-between mt-auto">
+      <div className="flex items-center justify-between mt-auto pt-3">
         <div className="flex flex-wrap gap-1">
           {tags.slice(0, 3).map(tag => (
             <span
               key={tag}
               className="px-1.5 py-0.5 rounded text-xs font-semibold"
               style={{
-                background: darkModeTagBg(accentColor),
+                background: accentBg(accentColor),
                 color: accentColor,
               }}
             >
@@ -69,20 +69,6 @@ export default function ModuleCard({ icon, num, title, description, href, articl
   );
 }
 
-function darkModeTagBg(accent: string): string {
-  const map: Record<string, string> = {
-    '#f59e0b': 'rgba(245,158,11,0.12)',
-    '#ef4444': 'rgba(239,68,68,0.12)',
-    '#d97706': 'rgba(217,119,6,0.12)',
-    '#b45309': 'rgba(180,83,9,0.12)',
-    '#f97316': 'rgba(249,115,22,0.12)',
-    '#eab308': 'rgba(234,179,8,0.12)',
-    '#ca8a04': 'rgba(202,138,4,0.12)',
-    '#dc2626': 'rgba(220,38,38,0.12)',
-    '#ea580c': 'rgba(234,88,12,0.12)',
-    '#c2410c': 'rgba(194,65,12,0.12)',
-    '#a16207': 'rgba(161,98,7,0.12)',
-    '#9a3412': 'rgba(154,52,18,0.12)',
-  };
-  return map[accent] ?? 'rgba(245,158,11,0.12)';
+function accentBg(accent: string): string {
+  return `${accent}1f`;
 }

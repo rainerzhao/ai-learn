@@ -1,3 +1,5 @@
+import { withBase } from '../lib/paths';
+
 interface Props {
   moduleCount: number;
   articleCount: number;
@@ -7,19 +9,22 @@ const tracks = [
   {
     name: '从硬件入门',
     desc: 'GPU 架构 -> CUDA -> NCCL',
-    href: '#modules',
+    href: withBase('/01_hardware_architecture/nvidia/understand_gpu_architecture/01_gpu_characteristics/'),
+    first: '先读 GPU 特性',
     tone: '#38bdf8',
   },
   {
     name: '做推理工程',
     desc: 'KV Cache -> vLLM -> 成本分析',
-    href: '#modules',
+    href: withBase('/09_inference_system/kv_cache/01_concepts/basic/kv_cache_原理简介/'),
+    first: '先读 KV Cache',
     tone: '#14b8a6',
   },
   {
     name: '搭应用系统',
     desc: 'Embedding -> RAG -> Agent',
-    href: '#modules',
+    href: withBase('/06_llm_theory_and_foundation/llm_basic_concepts/embedding/embedding/'),
+    first: '先读 Embedding',
     tone: '#a78bfa',
   },
 ];
@@ -144,6 +149,7 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
                 <span className="route-card__copy">
                   <strong>{track.name}</strong>
                   <small>{track.desc}</small>
+                  <em>{track.first}</em>
                 </span>
                 <span className="route-card__arrow">→</span>
               </a>

@@ -227,6 +227,16 @@ hr {
   line-height: 1.35;
 }
 
+.route-card__copy em {
+  display: inline-block;
+  margin-top: 0.45rem;
+  color: var(--route-tone);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
 .route-card__arrow {
   color: var(--route-tone);
   font-weight: 800;
@@ -251,8 +261,9 @@ hr {
 }
 
 .site-search-open .study-companion {
-  opacity: 0.34;
+  opacity: 0;
   transform: translateY(0.35rem);
+  pointer-events: none;
 }
 
 .site-search-open .study-companion__bubble {
@@ -364,7 +375,7 @@ hr {
 .cat-face,
 .cat-body,
 .cat-ear {
-  fill: #d7dce0;
+  fill: #d8d2c8;
   stroke: #52606b;
   stroke-width: 3.4;
   stroke-linejoin: round;
@@ -373,7 +384,7 @@ hr {
 .dark .cat-face,
 .dark .cat-body,
 .dark .cat-ear {
-  fill: #242f37;
+  fill: #2b302f;
   stroke: #61727e;
 }
 
@@ -408,9 +419,13 @@ hr {
 }
 
 .cat-eye {
-  fill: var(--accent-cool);
+  fill: #182026;
   animation: companion-blink 9s infinite;
   transform-origin: center;
+}
+
+.dark .cat-eye {
+  fill: #12181d;
 }
 
 .cat-eye-shine {
@@ -477,11 +492,7 @@ hr {
   }
 
   .study-companion__controls {
-    gap: 0.25rem;
-  }
-
-  .study-companion__controls button {
-    padding: 0.25rem 0.42rem;
+    display: none;
   }
 }
 
