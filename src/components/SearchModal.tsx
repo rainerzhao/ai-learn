@@ -12,44 +12,33 @@ interface SearchResult {
 
 type SearchStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
 
+interface PagefindModule {
+  init?: () => Promise<void> | void;
+  options?: (options: Record<string, unknown>) => Promise<void> | void;
+  search: (query: string) => Promise<{
+    results: Array<{
+      id: string;
+      data: () => Promise<SearchResult>;
+    }>;
+  }>;
+}
+
 declare global {
   interface Window {
-    pagefind?: {
-      init?: () => Promise<void> | void;
-      options?: (options: Record<string, unknown>) => void;
-      search: (query: string) => Promise<{
-        results: Array<{
-          id: string;
-          data: () => Promise<SearchResult>;
-        }>;
-      }>;
-    };
-    __pagefindLoading?: Promise<void>;
+    __pagefindLoading?: Promise<PagefindModule>;
   }
 }
 
 const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
 
-function loadPagefind(): Promise<void> {
-  if (window.pagefind) return Promise.resolve();
+async function loadPagefind(): Promise<PagefindModule> {
   if (window.__pagefindLoading) return window.__pagefindLoading;
 
-  window.__pagefindLoading = new Promise((resolve, reject) => {
-    const existing = document.querySelector<HTMLScriptElement>(`script[src="${pagefindScriptSrc}"]`);
-    if (existing) {
-      existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error('Pagefind failed to load')), { once: true });
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = pagefindScriptSrc;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Pagefind failed to load'));
-    document.head.appendChild(script);
-  }).then(async () => {
-    if (window.pagefind?.init) await window.pagefind.init();
-    window.pagefind?.options?.({ language: 'zh' });
+  window.__pagefindLoading = import(/* @vite-ignore */ pagefindScriptSrc).then(async module => {
+    const pagefind = module as PagefindModule;
+    if (pagefind.init) await pagefind.init();
+    if (pagefind.options) await pagefind.options({ language: 'zh' });
+    return pagefind;
   });
 
   return window.__pagefindLoading;
@@ -107,8 +96,8 @@ export default function SearchModal() {
 
     const timer = window.setTimeout(async () => {
       try {
-        await loadPagefind();
-        const search = await window.pagefind?.search(trimmed);
+        const pagefind = await loadPagefind();
+        const search = await pagefind.search(trimmed);
         const data = await Promise.all((search?.results ?? []).slice(0, 8).map(result => result.data()));
 
         if (cancelled) return;

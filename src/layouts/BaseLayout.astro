@@ -12,7 +12,6 @@ interface Props {
 }
 
 const { title, description = 'AI 基础设施知识体系 — 从硬件到应用的全栈技术指南' } = Astro.props;
-const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
 ---
 
 <!doctype html>
@@ -39,25 +38,5 @@ const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
       <slot />
     </main>
     <Footer />
-    <script define:vars={{ pagefindScriptSrc }}>
-      function loadPagefind() {
-        if (document.querySelector(`script[src="${pagefindScriptSrc}"]`)) return;
-        const script = document.createElement('script');
-        script.src = pagefindScriptSrc;
-        script.onload = () => {
-          // @ts-ignore
-          if (window.pagefind) {
-            // @ts-ignore
-            window.pagefind.init();
-            // @ts-ignore
-            window.pagefind.options({ language: 'zh' });
-          }
-        };
-        script.onerror = () => {};
-        document.head.appendChild(script);
-      }
-      document.addEventListener('DOMContentLoaded', loadPagefind);
-      document.addEventListener('astro:after-swap', loadPagefind);
-    </script>
   </body>
 </html>
