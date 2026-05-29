@@ -23,9 +23,10 @@
 
 配套数据目录：
 
-- `coding_plan/data/pricing_raw/<日期>/`：按采集日归档的原始 HTML / 截图 / 文本抽取结果（国内外厂商各自独立子目录）
 - `coding_plan/data/pricing_normalized.json`：清洗并归一化后的结构化定价数据（驱动报告与图表）
 - `coding_plan/data/manual_overrides.json`：无法从页面稳定抽取时的人工覆盖值，保证报告可复现
+
+原始网页快照由采集脚本在本地生成，用于人工核验与调试；仓库只保留结构化数据，并通过 `.gitignore` 排除原始 HTML / 截图 / 文本抽取结果。
 
 ## 3. 如何选择分析口径
 

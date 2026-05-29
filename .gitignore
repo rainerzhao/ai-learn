@@ -25,5 +25,8 @@ yarn-error.log*
 # Pagefind (when added)
 public/pagefind/
 
+# Generated raw snapshots
+content-md/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/
+
 # Old data
 _data/crawl_progress.db

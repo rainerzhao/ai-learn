@@ -314,7 +314,6 @@ def _make_record(
         "restrictions": restrictions,
         "source_url": source_url,
         "accessed_at": accessed_at,
-        "raw_snapshot_path": raw_snapshot_path,
         "extraction_method": extraction_method,
         "status": status,
         "notes": notes,

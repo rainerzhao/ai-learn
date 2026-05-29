@@ -4,7 +4,7 @@
     "product": "GitHub Copilot",
     "plan_name": "Free",
     "currency": "USD",
-    "price_monthly": 0.0,
+    "price_monthly": 0,
     "price_yearly_effective": null,
     "promo_price": null,
     "promo_conditions": null,
@@ -13,7 +13,6 @@
     "restrictions": null,
     "source_url": "https://github.com/features/copilot/plans",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "/Users/wangtianqing/Project/study/AI-fundermentals/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/2026-04-18/github/copilot-plans.html",
     "extraction_method": "html_text_window_price",
     "status": "ok",
     "notes": null
@@ -32,7 +31,6 @@
     "restrictions": null,
     "source_url": "https://github.com/features/copilot/plans",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/github/copilot-plans.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析不稳定的问题，价格以官方页面展示为准。"
@@ -51,7 +49,6 @@
     "restrictions": null,
     "source_url": "https://github.com/features/copilot/plans",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/github/copilot-plans.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析不稳定的问题，价格以官方页面展示为准。"
@@ -70,7 +67,6 @@
     "restrictions": null,
     "source_url": "https://github.com/features/copilot/plans",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/github/copilot-plans-businesses.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析不稳定的问题，价格以官方页面展示为准。"
@@ -89,7 +85,6 @@
     "restrictions": "购买入口为 Contact sales（以官方页面说明为准）",
     "source_url": "https://github.com/features/copilot/plans",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/github/copilot-plans-businesses.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于官方页面（For businesses）可视文本补齐 Enterprise $39 / user / month。"
@@ -99,7 +94,7 @@
     "product": "Cursor",
     "plan_name": "Hobby",
     "currency": "USD",
-    "price_monthly": 0.0,
+    "price_monthly": 0,
     "price_yearly_effective": null,
     "promo_price": null,
     "promo_conditions": null,
@@ -108,7 +103,6 @@
     "restrictions": null,
     "source_url": "https://www.cursor.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "/Users/wangtianqing/Project/study/AI-fundermentals/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/2026-04-18/cursor/cursor-pricing.html",
     "extraction_method": "html_text_window_price",
     "status": "ok",
     "notes": null
@@ -127,7 +121,6 @@
     "restrictions": null,
     "source_url": "https://www.cursor.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-18/cursor/cursor-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "覆盖解析错误的 1.0 价格。"
@@ -137,7 +130,7 @@
     "product": "Cursor",
     "plan_name": "Business",
     "currency": "USD",
-    "price_monthly": 40.0,
+    "price_monthly": 40,
     "price_yearly_effective": null,
     "promo_price": null,
     "promo_conditions": null,
@@ -146,7 +139,6 @@
     "restrictions": null,
     "source_url": "https://www.cursor.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "/Users/wangtianqing/Project/study/AI-fundermentals/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/2026-04-18/cursor/cursor-pricing.html",
     "extraction_method": "html_text_window_price",
     "status": "ok",
     "notes": null
@@ -156,7 +148,7 @@
     "product": "Cursor",
     "plan_name": "Ultra",
     "currency": "USD",
-    "price_monthly": 200.0,
+    "price_monthly": 200,
     "price_yearly_effective": null,
     "promo_price": null,
     "promo_conditions": null,
@@ -165,7 +157,6 @@
     "restrictions": null,
     "source_url": "https://www.cursor.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "/Users/wangtianqing/Project/study/AI-fundermentals/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/2026-04-18/cursor/cursor-pricing.html",
     "extraction_method": "html_text_window_price",
     "status": "ok",
     "notes": null
@@ -184,7 +175,6 @@
     "restrictions": null,
     "source_url": "https://www.cursor.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/cursor/cursor-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "手动补齐解析脚本漏抓的 Pro+ 套餐。"
@@ -194,7 +184,7 @@
     "product": "Windsurf (Codeium)",
     "plan_name": "Free",
     "currency": "USD",
-    "price_monthly": 0.0,
+    "price_monthly": 0,
     "price_yearly_effective": null,
     "promo_price": null,
     "promo_conditions": null,
@@ -203,7 +193,6 @@
     "restrictions": null,
     "source_url": "https://windsurf.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": "/Users/wangtianqing/Project/study/AI-fundermentals/09_inference_system/cost_analysis/coding_plan/data/pricing_raw/2026-04-18/windsurf/windsurf-pricing.html",
     "extraction_method": "html_text_window_price",
     "status": "ok",
     "notes": null
@@ -222,7 +211,6 @@
     "restrictions": null,
     "source_url": "https://windsurf.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/windsurf/windsurf-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖 Next.js 页面渲染导致的自动解析不稳定问题，价格以官方页面展示为准。"
@@ -241,7 +229,6 @@
     "restrictions": null,
     "source_url": "https://windsurf.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/windsurf/windsurf-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖 Next.js 页面渲染导致的自动解析不稳定问题，价格以官方页面展示为准。"
@@ -260,7 +247,6 @@
     "restrictions": null,
     "source_url": "https://aws.amazon.com/q/developer/pricing/",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格口径来自 AWS 官方定价页（可从页面定价说明中检索到 19 美元）。"
@@ -279,7 +265,6 @@
     "restrictions": null,
     "source_url": "https://claude.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/anthropic/claude-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析误取年付折算或席位类型的问题，价格以官方页面展示为准。"
@@ -298,7 +283,6 @@
     "restrictions": null,
     "source_url": "https://claude.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/anthropic/claude-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于页面可视文本“From $100 per month”补齐 Max 最低月费口径。"
@@ -317,7 +301,6 @@
     "restrictions": null,
     "source_url": "https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/jetbrains/jetbrains-ai-licensing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析误把 Credits 当价格的问题，价格以官方文档表格为准。"
@@ -336,7 +319,6 @@
     "restrictions": null,
     "source_url": "https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/jetbrains/jetbrains-ai-licensing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析误把 Credits 当价格的问题，价格以官方文档表格为准。"
@@ -355,7 +337,6 @@
     "restrictions": null,
     "source_url": "https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/jetbrains/jetbrains-ai-licensing.html",
     "extraction_method": "manual_override",
     "status": "needs_review",
     "notes": "企业版通常为按需定价或需销售报价，暂不在表中给出固定价格。"
@@ -374,7 +355,6 @@
     "restrictions": null,
     "source_url": "https://old-www.tabnine.com/pricing",
     "accessed_at": "2026-04-18",
-    "raw_snapshot_path": null,
     "extraction_method": "download",
     "status": "download_failed",
     "notes": "抓取失败，详见对应 .error.txt 快照。"
@@ -393,7 +373,6 @@
     "restrictions": null,
     "source_url": "https://replit.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/replit/replit-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于官方页面可视文本补齐 Core 的月付与年付折算价口径。"
@@ -412,7 +391,6 @@
     "restrictions": null,
     "source_url": "https://replit.com/pricing",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/replit/replit-pricing.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于官方页面可视文本补齐 Pro 的月付与年付折算价口径。"
@@ -431,7 +409,6 @@
     "restrictions": "自 2026 年 3 月 20 日起停止新购；4 月 13 日起停止续费与升级",
     "source_url": "https://help.aliyun.com/zh/model-studio/coding-plan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/snapshot/aliyun-bailian-coding-plan.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析不稳定问题，目前已下架停止新购与续费。"
@@ -450,7 +427,6 @@
     "restrictions": null,
     "source_url": "https://help.aliyun.com/zh/model-studio/coding-plan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/snapshot/aliyun-bailian-coding-plan.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "用于覆盖自动解析不稳定问题，目前活动已结束，且独享 qwen3.6-plus。"
@@ -469,7 +445,6 @@
     "restrictions": "每日限量供应，部分活动套餐可能出现“已抢光”",
     "source_url": "https://cloud.tencent.com/act/pro/codingplan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于官方活动页可视文本补齐 Lite 套餐日常价、首月活动价与额度口径。"
@@ -488,7 +463,6 @@
     "restrictions": "每日限量供应，部分活动套餐可能出现“已抢光”",
     "source_url": "https://cloud.tencent.com/act/pro/codingplan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/snapshot/tencent-coding-plan.html",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "基于官方活动页可视文本补齐 Pro 套餐日常价、首月活动价与额度口径。"
@@ -507,7 +481,6 @@
     "restrictions": "不能用于 API 调用，仅在 AI 编程工具中生效（以官方文档为准）",
     "source_url": "https://www.volcengine.com/activity/codingplan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自火山引擎官方活动页；额度口径来自官方文档。"
@@ -526,7 +499,6 @@
     "restrictions": "不能用于 API 调用，仅在 AI 编程工具中生效（以官方文档为准）",
     "source_url": "https://www.volcengine.com/activity/codingplan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自火山引擎官方活动页；额度口径来自官方文档。"
@@ -545,7 +517,6 @@
     "restrictions": null,
     "source_url": "https://platform.minimaxi.com/docs/guides/pricing-token-plan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格与额度来自 MiniMax 官方 Token Plan 定价文档。"
@@ -564,7 +535,6 @@
     "restrictions": null,
     "source_url": "https://platform.minimaxi.com/docs/guides/pricing-token-plan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格与额度来自 MiniMax 官方 Token Plan 定价文档。"
@@ -583,7 +553,6 @@
     "restrictions": null,
     "source_url": "https://platform.minimaxi.com/docs/guides/pricing-token-plan",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格与额度来自 MiniMax 官方 Token Plan 定价文档。"
@@ -602,7 +571,6 @@
     "restrictions": "需在支持的 Code Agent 工具中使用（以官方文档说明为准）",
     "source_url": "https://www.kimi.com/code",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自 Kimi Code 页面可视文本；用量口径来自 Kimi Code 文档。"
@@ -621,7 +589,6 @@
     "restrictions": null,
     "source_url": "https://www.kimi.com/code",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自 Kimi Code 页面可视文本。"
@@ -640,7 +607,6 @@
     "restrictions": null,
     "source_url": "https://www.kimi.com/code",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自 Kimi Code 页面可视文本。"
@@ -659,7 +625,6 @@
     "restrictions": null,
     "source_url": "https://www.kimi.com/code",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": null,
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自 Kimi Code 页面可视文本。"
@@ -678,7 +643,6 @@
     "restrictions": "有效期：1 个月；页面显示已售罄；每个账号每类月卡限购 5 张；龙虾套餐目前仅支持 GLM-5-Turbo（以官方页面说明为准）",
     "source_url": "https://www.bigmodel.cn/claw-plan-team",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-claw-plan-team.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格与 tokens 包来自页面可视文本（截图 + OCR）。"
@@ -697,7 +661,6 @@
     "restrictions": "有效期：1 个月；页面显示已售罄；每个账号每类月卡限购 5 张；龙虾套餐目前仅支持 GLM-5-Turbo（以官方页面说明为准）",
     "source_url": "https://www.bigmodel.cn/claw-plan-team",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-claw-plan-team.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格与 tokens 包来自页面可视文本（截图 + OCR）。"
@@ -716,7 +679,6 @@
     "restrictions": "页面展示为按需定制与联系销售；不提供公开固定价",
     "source_url": "https://www.bigmodel.cn/claw-plan-team",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-claw-plan-team.extracted.txt",
     "extraction_method": "manual_override",
     "status": "needs_review",
     "notes": "官方页面未给出固定价格，表中不填写 price_monthly。"
@@ -735,7 +697,6 @@
     "restrictions": null,
     "source_url": "https://bigmodel.cn/glm-coding",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-glm-coding.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自官方页面可视文本（截图 + OCR）。"
@@ -754,7 +715,6 @@
     "restrictions": null,
     "source_url": "https://bigmodel.cn/glm-coding",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-glm-coding.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自官方页面可视文本（截图 + OCR）。"
@@ -773,7 +733,6 @@
     "restrictions": null,
     "source_url": "https://bigmodel.cn/glm-coding",
     "accessed_at": "2026-04-17",
-    "raw_snapshot_path": "data/pricing_raw/2026-04-17/zhipu/zhipu-glm-coding.extracted.txt",
     "extraction_method": "manual_override",
     "status": "ok",
     "notes": "价格来自官方页面可视文本（截图 + OCR）。"
