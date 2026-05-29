@@ -12,6 +12,9 @@ interface Props {
 }
 
 const { title, description = 'AI 基础设施知识体系 — 从硬件到应用的全栈技术指南' } = Astro.props;
+const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
+const pagefindEntrySrc = withBase('/pagefind/pagefind-entry.json');
+const pagefindWasmSrc = withBase('/pagefind/wasm.unknown.pagefind');
 ---
 
 <!doctype html>
@@ -24,6 +27,9 @@ const { title, description = 'AI 基础设施知识体系 — 从硬件到应用
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="modulepreload" href={pagefindScriptSrc} />
+    <link rel="preload" href={pagefindEntrySrc} as="fetch" crossorigin="anonymous" />
+    <link rel="preload" href={pagefindWasmSrc} as="fetch" type="application/wasm" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&display=swap" />

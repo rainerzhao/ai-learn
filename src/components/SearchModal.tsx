@@ -26,6 +26,8 @@ interface PagefindModule {
 declare global {
   interface Window {
     __pagefindLoading?: Promise<PagefindModule>;
+    requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
+    cancelIdleCallback?: (handle: number) => void;
   }
 }
 
@@ -42,6 +44,10 @@ async function loadPagefind(): Promise<PagefindModule> {
   });
 
   return window.__pagefindLoading;
+}
+
+function warmPagefind() {
+  void loadPagefind().catch(() => {});
 }
 
 export default function SearchModal() {
@@ -65,8 +71,21 @@ export default function SearchModal() {
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (window.requestIdleCallback) {
+      const handle = window.requestIdleCallback(warmPagefind, { timeout: 2500 });
+      return () => window.cancelIdleCallback?.(handle);
+    }
+
+    const timer = window.setTimeout(warmPagefind, 1200);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
+      warmPagefind();
     }
   }, [open]);
 
@@ -128,6 +147,8 @@ export default function SearchModal() {
     <>
       <button
         onClick={() => setOpen(true)}
+        onMouseEnter={warmPagefind}
+        onFocus={warmPagefind}
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors"
         style={{
           color: 'var(--text-secondary)',
