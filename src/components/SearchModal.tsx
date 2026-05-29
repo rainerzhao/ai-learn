@@ -71,6 +71,17 @@ export default function SearchModal() {
   }, []);
 
   useEffect(() => {
+    function handleOpenSearch(e: Event) {
+      const detail = (e as CustomEvent<{ query?: string }>).detail;
+      setOpen(true);
+      if (detail?.query) setQuery(detail.query);
+    }
+
+    window.addEventListener('open-site-search', handleOpenSearch);
+    return () => window.removeEventListener('open-site-search', handleOpenSearch);
+  }, []);
+
+  useEffect(() => {
     if (typeof window === 'undefined') return;
 
     if (window.requestIdleCallback) {
@@ -81,6 +92,11 @@ export default function SearchModal() {
     const timer = window.setTimeout(warmPagefind, 1200);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle('site-search-open', open);
+    return () => document.body.classList.remove('site-search-open');
+  }, [open]);
 
   useEffect(() => {
     if (open && inputRef.current) {
@@ -166,15 +182,15 @@ export default function SearchModal() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]"
-          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+          className="fixed inset-0 z-[100] flex items-start justify-center pt-[13vh] px-4"
+          style={{ background: 'var(--modal-overlay)', backdropFilter: 'blur(4px)' }}
         >
           <div
             ref={containerRef}
-            className="w-full max-w-xl rounded-xl shadow-2xl overflow-hidden"
+            className="w-full max-w-2xl rounded-lg shadow-2xl overflow-hidden"
             style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}
           >
-            <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}>
               <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: 'var(--text-muted)' }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -192,20 +208,54 @@ export default function SearchModal() {
             </div>
             <div id="pagefind-search-results" className="max-h-[60vh] overflow-y-auto p-2">
               {status === 'idle' && (
-                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
-                  输入关键词搜索文章...
+                <div className="px-4 py-5">
+                  <div className="text-sm mb-3" style={{ color: 'var(--text-muted)' }}>
+                    输入关键词搜索文章，或者先从这些入口开始：
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {['gpu', 'cuda', '推理', 'rag', 'agent', 'kv cache'].map(item => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => setQuery(item)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
+                        style={{
+                          color: 'var(--accent)',
+                          background: 'var(--bg-secondary)',
+                          border: '1px solid var(--border)',
+                        }}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {status === 'loading' && (
-                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
-                  搜索中...
+                <div className="px-4 py-6" style={{ color: 'var(--text-muted)' }}>
+                  <div className="search-skeleton" />
+                  <div className="search-skeleton search-skeleton--short" />
                 </div>
               )}
 
               {status === 'empty' && (
-                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
-                  没有找到相关内容
+                <div className="px-4 py-6" style={{ color: 'var(--text-muted)' }}>
+                  <div className="font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>没有找到相关内容</div>
+                  <div className="text-sm mb-3">可以换成更短的技术词，或者从热门主题重新开始。</div>
+                  <div className="flex flex-wrap gap-2">
+                    {['gpu', '推理', 'agent', 'rag'].map(item => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => setQuery(item)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold"
+                        style={{ color: 'var(--accent)', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 

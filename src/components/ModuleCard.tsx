@@ -10,9 +10,9 @@ interface Props {
 }
 
 const MODULE_ACCENTS = [
-  '#f59e0b', '#f97316', '#d97706', '#b45309',
-  '#ea580c', '#fbbf24', '#ca8a04', '#c2410c',
-  '#f59e0b', '#b45309', '#92400e', '#a16207',
+  '#f59e0b', '#14b8a6', '#38bdf8', '#a78bfa',
+  '#f97316', '#22c55e', '#e879f9', '#60a5fa',
+  '#fb7185', '#84cc16', '#facc15', '#2dd4bf',
 ];
 
 export { MODULE_ACCENTS };
@@ -21,7 +21,7 @@ export default function ModuleCard({ icon, num, title, description, href, articl
   return (
     <a
       href={href}
-      className="group block rounded-xl p-5 transition-all duration-200 hover:-translate-y-1"
+      className="group block rounded-lg p-5 transition-all duration-200 hover:-translate-y-0.5"
       style={{
         background: 'var(--bg-card)',
         border: '1.5px solid var(--border)',
@@ -35,7 +35,12 @@ export default function ModuleCard({ icon, num, title, description, href, articl
         className="h-[4px] rounded-full mb-4 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
         style={{ background: accentColor }}
       />
-      <div className="text-3xl mb-2 leading-none">{icon}</div>
+      <div
+        className="grid place-items-center w-10 h-10 rounded-lg mb-3 text-2xl leading-none"
+        style={{ background: darkModeTagBg(accentColor) }}
+      >
+        {icon}
+      </div>
       <div className="text-xs font-bold tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
         MODULE {num}
       </div>

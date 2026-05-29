@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ReadingProgressBar from '../components/ReadingProgressBar';
+import StudyCompanion from '../components/StudyCompanion';
 import { ClientRouter } from 'astro:transitions';
 import { withBase } from '../lib/paths';
 
@@ -43,6 +44,7 @@ const pagefindWasmSrc = withBase('/pagefind/wasm.unknown.pagefind');
     <main class="flex-1" data-pagefind-body>
       <slot />
     </main>
+    <StudyCompanion client:load />
     <Footer />
   </body>
 </html>

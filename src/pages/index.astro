@@ -24,13 +24,19 @@ function getModuleTags(mod: typeof nav[number]): string[] {
   <HeroSection moduleCount={nav.length} articleCount={totalArticles} client:load />
 
   <section id="modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="text-center mb-12">
-      <h2 class="text-2xl font-extrabold mb-2" style="color: var(--text-primary)">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <div>
+        <p class="text-sm font-semibold mb-2" style="color: var(--accent)">Browse the map</p>
+        <h2 class="text-2xl font-extrabold mb-2" style="color: var(--text-primary)">
         核心知识体系
-      </h2>
-      <p style="color: var(--text-secondary)">
-        系统化 AI 技术体系，从芯片底层到智能应用，深入每个技术层次
-      </p>
+        </h2>
+        <p style="color: var(--text-secondary)">
+          像逛地图一样进入主题：先看方向，再钻文章。
+        </p>
+      </div>
+      <div class="text-sm" style="color: var(--text-muted)">
+        适合搜索、跳读，也适合按路线系统学习。
+      </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
