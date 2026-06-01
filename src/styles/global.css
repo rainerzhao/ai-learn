@@ -216,6 +216,19 @@ hr {
   display: block;
 }
 
+.route-card__intent {
+  display: inline-flex;
+  max-width: 100%;
+  margin-bottom: 0.35rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--route-tone) 14%, var(--bg-card));
+  color: var(--route-tone);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
 .route-card__copy strong {
   color: var(--text-primary);
   line-height: 1.25;
@@ -230,6 +243,9 @@ hr {
 .route-card__copy em {
   display: inline-block;
   margin-top: 0.45rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--route-tone) 10%, transparent);
   color: var(--route-tone);
   font-size: 0.72rem;
   font-style: normal;
@@ -283,13 +299,17 @@ hr {
 
 .study-companion__wake {
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 50%;
   background: var(--bg-card);
   color: var(--text-secondary);
   box-shadow: var(--soft-shadow);
-  font-size: 0.78rem;
+  width: 2.65rem;
+  height: 2.65rem;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
   font-weight: 800;
-  padding: 0.55rem 0.8rem;
+  padding: 0;
   cursor: pointer;
 }
 
@@ -377,7 +397,7 @@ hr {
 .cat-ear {
   fill: #d8d2c8;
   stroke: #52606b;
-  stroke-width: 3.4;
+  stroke-width: 2.8;
   stroke-linejoin: round;
 }
 
@@ -391,6 +411,26 @@ hr {
 .cat-patch {
   fill: #f2b15f;
   opacity: 0.92;
+}
+
+.cat-inner-ear {
+  fill: #e8a99b;
+  opacity: 0.8;
+}
+
+.dark .cat-inner-ear {
+  fill: #8b5b5f;
+  opacity: 0.72;
+}
+
+.cat-cheek {
+  fill: #eaa6a0;
+  opacity: 0.42;
+}
+
+.dark .cat-cheek {
+  fill: #b36a72;
+  opacity: 0.34;
 }
 
 .cat-tail,
@@ -416,6 +456,7 @@ hr {
 .cat-tail {
   stroke-width: 6;
   transform-origin: 86px 82px;
+  transform: rotate(-5deg);
 }
 
 .cat-eye {
@@ -476,6 +517,92 @@ hr {
   animation: companion-tail 2.8s ease-in-out infinite;
 }
 
+.article-next-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+.article-next-nav__item {
+  min-height: 5.5rem;
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.article-next-nav__item:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+.article-next-nav__item span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.article-next-nav__item strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.article-next-nav__item--next {
+  text-align: right;
+}
+
+.article-tree__summary {
+  list-style: none;
+}
+
+.article-tree__summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-tree__summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1rem;
+  margin-right: 0.15rem;
+  color: var(--accent);
+  transition: transform 0.2s;
+}
+
+details[open] > .article-tree__summary::before {
+  transform: rotate(90deg);
+}
+
+.article-tree__link::before {
+  content: "";
+  display: inline-block;
+  width: 0.38rem;
+  height: 0.38rem;
+  margin-right: 0.55rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 55%, var(--border));
+  vertical-align: 0.08rem;
+}
+
+.route-chip {
+  max-width: min(100%, 18rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .study-companion {
     bottom: 0.75rem;
@@ -487,12 +614,20 @@ hr {
   }
 
   .study-companion__body {
-    width: 4.35rem;
-    height: 4.05rem;
+    width: 3.65rem;
+    height: 3.4rem;
   }
 
   .study-companion__controls {
     display: none;
+  }
+
+  .article-next-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .article-next-nav__item--next {
+    text-align: left;
   }
 }
 

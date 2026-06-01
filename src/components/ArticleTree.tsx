@@ -14,10 +14,10 @@ export default function ArticleTree({ items, depth = 0 }: Props) {
             <li key={i}>
               <details open={depth < 1} className="group">
                 <summary
-                  className="cursor-pointer font-medium text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]"
+                  className="article-tree__summary cursor-pointer font-medium text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  📁 {child.title}
+                  {child.title}
                 </summary>
                 <ArticleTree items={child.children} depth={depth + 1} />
               </details>
@@ -28,10 +28,10 @@ export default function ArticleTree({ items, depth = 0 }: Props) {
           <li key={i}>
             <a
               href={(child as NavArticle).href}
-              className="block text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]"
+              className="article-tree__link block text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]"
               style={{ color: 'var(--text-secondary)' }}
             >
-              📄 {child.title}
+              {child.title}
             </a>
           </li>
         );

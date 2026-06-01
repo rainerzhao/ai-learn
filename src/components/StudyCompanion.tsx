@@ -86,8 +86,8 @@ export default function StudyCompanion() {
   if (hidden) {
     return (
       <aside className="study-companion study-companion--hidden" aria-label="学习伙伴已隐藏">
-        <button type="button" className="study-companion__wake" onClick={wake}>
-          唤醒猫咪
+        <button type="button" className="study-companion__wake" onClick={wake} title="唤醒陪读猫咪" aria-label="唤醒陪读猫咪">
+          <span aria-hidden="true">🐾</span>
         </button>
       </aside>
     );
@@ -115,11 +115,15 @@ export default function StudyCompanion() {
           <path className="cat-body" d="M31 61c1-18 13-31 30-31s30 13 30 31v14c0 17-12 27-30 27S31 92 31 75V61Z" />
           <path className="cat-ear cat-ear-left" d="M38 38 44 14l17 20" />
           <path className="cat-ear cat-ear-right" d="M82 38 76 14 59 34" />
+          <path className="cat-inner-ear cat-inner-ear-left" d="M43 34 46 22l9 12" />
+          <path className="cat-inner-ear cat-inner-ear-right" d="M77 34 74 22l-9 12" />
           <path className="cat-face" d="M25 58c0-22 15-36 35-36s35 14 35 36c0 21-13 34-35 34S25 79 25 58Z" />
           <path className="cat-patch" d="M51 23c8-6 18-3 23 3-2 8-7 13-14 13-6 0-10-5-9-16Z" />
           <ellipse className="cat-eye" cx="47" cy="58" rx="4.5" ry="6" />
           <ellipse className="cat-eye" cx="73" cy="58" rx="4.5" ry="6" />
           <path className="cat-eye-shine" d="M45 55h2M71 55h2" />
+          <ellipse className="cat-cheek" cx="42" cy="69" rx="6" ry="3.2" />
+          <ellipse className="cat-cheek" cx="78" cy="69" rx="6" ry="3.2" />
           <path className="cat-nose" d="M60 65 56 69h8l-4-4Z" />
           <path className="cat-mouth" d="M60 70c-2 4-7 5-10 2M60 70c2 4 7 5 10 2" />
           <path className="cat-whisker" d="M39 67H19M40 73l-18 5M81 67h20M80 73l18 5" />

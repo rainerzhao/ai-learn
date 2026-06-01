@@ -103,7 +103,7 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
                         {recommended.map((article: NavArticle) => (
                           <a
                             href={article.href}
-                            class="inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
+                            class="route-chip inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
                             style="background: var(--bg-secondary); color: var(--accent); border: 1px solid var(--border)"
                           >
                             {article.title}

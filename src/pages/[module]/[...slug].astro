@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content';
 import { getModuleByDir } from '../../lib/modules';
 import { withBase } from '../../lib/paths';
 import { isPublishableArticleId } from '../../lib/content-filters';
+import { buildNavigation, flattenArticles } from '../../lib/navigation';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ id }) => isPublishableArticleId(id));
@@ -33,6 +34,13 @@ const h1 = headings?.find((h: any) => h.depth === 1);
 const title = entry.data.title || h1?.text || entry.id.split('/').pop()?.replace(/[-_]/g, ' ') || 'Untitled';
 const tags = entry.data.tags || [];
 const date = entry.data.date || entry.data.last_updated || '';
+const nav = buildNavigation();
+const currentModule = nav.find(mod => mod.slug === moduleSlug);
+const moduleArticles = currentModule ? flattenArticles(currentModule.children) : [];
+const currentHref = withBase(`/${entry.id}`);
+const currentIndex = moduleArticles.findIndex(article => article.href === currentHref);
+const previousArticle = currentIndex > 0 ? moduleArticles[currentIndex - 1] : undefined;
+const nextArticle = currentIndex >= 0 && currentIndex < moduleArticles.length - 1 ? moduleArticles[currentIndex + 1] : undefined;
 
 const breadcrumbs = [
   { label: moduleInfo?.name || moduleSlug, href: withBase(`/${moduleSlug}/`) },
@@ -40,7 +48,14 @@ const breadcrumbs = [
 ];
 ---
 
-<ArticleLayout title={title} breadcrumbs={breadcrumbs} tags={tags} date={date ? String(date) : undefined}>
+<ArticleLayout
+  title={title}
+  breadcrumbs={breadcrumbs}
+  tags={tags}
+  date={date ? String(date) : undefined}
+  previousArticle={previousArticle}
+  nextArticle={nextArticle}
+>
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-8">
     <div>
       <Content />

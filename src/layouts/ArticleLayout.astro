@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { withBase } from '../lib/paths';
+import type { NavArticle } from '../lib/navigation';
 
 interface BreadcrumbItem {
   label: string;
@@ -14,9 +15,11 @@ interface Props {
   breadcrumbs: BreadcrumbItem[];
   tags?: string[];
   date?: string;
+  previousArticle?: NavArticle;
+  nextArticle?: NavArticle;
 }
 
-const { title, description, breadcrumbs, tags = [], date } = Astro.props;
+const { title, description, breadcrumbs, tags = [], date, previousArticle, nextArticle } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -47,6 +50,25 @@ const { title, description, breadcrumbs, tags = [], date } = Astro.props;
       <div class="article-content">
         <slot />
       </div>
+
+      {(previousArticle || nextArticle) && (
+        <nav class="article-next-nav" aria-label="继续学习">
+          {previousArticle ? (
+            <a class="article-next-nav__item" href={previousArticle.href}>
+              <span>上一篇</span>
+              <strong>{previousArticle.title}</strong>
+            </a>
+          ) : (
+            <span></span>
+          )}
+          {nextArticle && (
+            <a class="article-next-nav__item article-next-nav__item--next" href={nextArticle.href}>
+              <span>继续下一篇</span>
+              <strong>{nextArticle.title}</strong>
+            </a>
+          )}
+        </nav>
+      )}
     </article>
   </div>
 </BaseLayout>

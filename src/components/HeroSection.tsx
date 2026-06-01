@@ -11,6 +11,7 @@ const tracks = [
     desc: 'GPU 架构 -> CUDA -> NCCL',
     href: withBase('/01_hardware_architecture/nvidia/understand_gpu_architecture/01_gpu_characteristics/'),
     first: '先读 GPU 特性',
+    intent: '我想理解硬件',
     tone: '#38bdf8',
   },
   {
@@ -18,6 +19,7 @@ const tracks = [
     desc: 'KV Cache -> vLLM -> 成本分析',
     href: withBase('/09_inference_system/kv_cache/01_concepts/basic/kv_cache_原理简介/'),
     first: '先读 KV Cache',
+    intent: '我想做推理',
     tone: '#14b8a6',
   },
   {
@@ -25,6 +27,7 @@ const tracks = [
     desc: 'Embedding -> RAG -> Agent',
     href: withBase('/06_llm_theory_and_foundation/llm_basic_concepts/embedding/embedding/'),
     first: '先读 Embedding',
+    intent: '我想搭应用',
     tone: '#a78bfa',
   },
 ];
@@ -147,6 +150,7 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
               >
                 <span className="route-card__index">{String(index + 1).padStart(2, '0')}</span>
                 <span className="route-card__copy">
+                  <span className="route-card__intent">{track.intent}</span>
                   <strong>{track.name}</strong>
                   <small>{track.desc}</small>
                   <em>{track.first}</em>

@@ -1,6 +1,6 @@
 # 12-Factor Agents - 构建可靠 LLM 应用的原则
 
-> 项目地址：<
+> 项目地址：[humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents)
 
 ## 问题/需求：为什么我们需要新的方法论？
 
