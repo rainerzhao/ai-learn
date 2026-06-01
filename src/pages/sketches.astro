@@ -20,7 +20,7 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
           <h1>把 AI 基础设施画成能一眼抓住的 {totalSketches} 张卡</h1>
           <p>
             从 IaaS 架构师和运维负责人的视角出发，把“资源池、网络、存储、调度、SRE、安全、成本”
-            翻译成 AI 架构里的 GPU 集群、模型服务、RAG、Agent、评测和治理。
+            与 AI 自身的“表示、上下文、评测、协议、系统边界、经济学”合在一张转型地图里。
           </p>
           <div class="sketch-hero__actions">
             <a href="#iaas-transition" class="sketch-button">看转型路线</a>
@@ -38,34 +38,38 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
         </div>
       </section>
 
-      <section class="ai-lens">
-        <div class="ai-lens__heading">
-          <p class="sketch-kicker">AI 自身视角</p>
-          <h2>建议额外补充的横向知识点</h2>
-        </div>
-        <div class="ai-lens__grid">
-          {AI_SUPPLEMENT_POINTS.map(point => (
-            <article>
-              <h3>{point.title}</h3>
-              <p>{point.desc}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section id="iaas-transition" class="transition-board">
         <div class="transition-board__head">
           <div>
-            <p class="sketch-kicker">IaaS architect path</p>
+            <p class="sketch-kicker">IaaS x AI lens</p>
             <h2>从 IaaS 运维架构师转向 AI 架构师</h2>
             <p>
-              这组不是按原有模块切，而是按真实转型要跨过的架构问题切。先补 {transitionSketchCount} 张，
-              覆盖心智、容量、网络存储、SRE、安全、成本、交付和路线图。
+              这组不是把 IaaS 经验丢掉重学 AI，而是把两套语言合起来：IaaS 负责资源、网络、存储、SRE、安全和成本，
+              AI 负责表示、上下文、评测、协议、边界和推理经济学。先补 {transitionSketchCount} 张，按真实转型问题切开。
             </p>
           </div>
           <div class="transition-board__stamp">
             <strong>{transitionSketchCount}</strong>
             <span>转型卡</span>
+          </div>
+        </div>
+
+        <div class="ai-lens">
+          <div class="ai-lens__heading">
+            <p class="sketch-kicker">AI 自身视角</p>
+            <h3>IaaS 能力要和 AI 的内部机制一起看</h3>
+            <p>
+              容量规划不能只看机器，要看 token、上下文和推理链路；稳定性不能只看进程，要看幻觉、漂移和评测闭环；
+              平台治理也不能只看权限，要看模型边界、数据边界和调用协议。
+            </p>
+          </div>
+          <div class="ai-lens__grid">
+            {AI_SUPPLEMENT_POINTS.map(point => (
+              <article>
+                <h4>{point.title}</h4>
+                <p>{point.desc}</p>
+              </article>
+            ))}
           </div>
         </div>
 
@@ -253,11 +257,13 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
   }
 
   .ai-lens {
-    margin-top: 1.5rem;
+    margin: 1rem 0 1.25rem;
     padding: 1.25rem;
-    border: 1px solid var(--border);
+    border: 1px dashed color-mix(in srgb, var(--accent-warm) 48%, var(--border));
     border-radius: 8px;
-    background: var(--bg-card);
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, transparent), color-mix(in srgb, var(--bg-secondary) 94%, transparent)),
+      repeating-linear-gradient(2deg, transparent 0 17px, color-mix(in srgb, var(--accent-warm) 5%, transparent) 18px 19px);
   }
 
   .ai-lens__heading {
@@ -267,9 +273,16 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
     margin-bottom: 1rem;
   }
 
-  .ai-lens h2 {
+  .ai-lens h3 {
     margin: 0;
     font-size: 1.25rem;
+  }
+
+  .ai-lens__heading p:not(.sketch-kicker) {
+    max-width: 58rem;
+    margin: 0.2rem 0 0;
+    color: var(--text-secondary);
+    line-height: 1.7;
   }
 
   .ai-lens__grid {
@@ -286,7 +299,7 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
     background: var(--bg-secondary);
   }
 
-  .ai-lens h3 {
+  .ai-lens h4 {
     margin: 0 0 0.35rem;
     color: var(--accent);
     font-size: 0.96rem;
