@@ -3,9 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/HeroSection';
 import ModuleCard, { MODULE_ACCENTS } from '../components/ModuleCard';
 import { buildNavigation, type NavSection, type NavArticle } from '../lib/navigation';
+import { countSketches } from '../lib/knowledge-sketches';
+import { withBase } from '../lib/paths';
 
 const nav = buildNavigation();
 const totalArticles = nav.reduce((sum, m) => sum + m.articleCount, 0);
+const totalSketches = countSketches();
 
 function getModuleTags(mod: typeof nav[number]): string[] {
   const tagSet = new Set<string>();
@@ -22,6 +25,23 @@ function getModuleTags(mod: typeof nav[number]): string[] {
 
 <BaseLayout title="AI Fundamentals" description="完整的 AI 基础设施知识体系 — 从硬件到应用的全栈技术指南">
   <HeroSection moduleCount={nav.length} articleCount={totalArticles} client:load />
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+    <div class="sketch-entry">
+      <div>
+        <p class="text-sm font-semibold mb-2" style="color: var(--accent)">AI lens</p>
+        <h2 class="text-xl font-extrabold mb-2" style="color: var(--text-primary)">
+          新增：手绘知识卡入口
+        </h2>
+        <p style="color: var(--text-secondary)">
+          从 AI 自身视角补齐表示、上下文、记忆、评测、协议、系统边界与成本线索；并加入 IaaS 架构师转 AI 架构师专题，共 {totalSketches} 页。
+        </p>
+      </div>
+      <a href={withBase('/sketches/')} class="sketch-entry__button">
+        打开手绘知识库
+      </a>
+    </div>
+  </section>
 
   <section id="modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
@@ -55,3 +75,44 @@ function getModuleTags(mod: typeof nav[number]): string[] {
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .sketch-entry {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--border));
+    border-radius: 8px;
+    padding: 1.1rem;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--bg-card)), var(--bg-card)),
+      repeating-linear-gradient(-5deg, transparent 0 18px, color-mix(in srgb, var(--accent-warm) 8%, transparent) 19px 20px);
+    box-shadow: var(--soft-shadow);
+  }
+
+  @media (min-width: 760px) {
+    .sketch-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 1.25rem 1.35rem;
+    }
+  }
+
+  .sketch-entry__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    background: var(--accent);
+    color: #0f1117;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .sketch-entry__button:hover {
+    background: var(--accent-hover);
+    color: #0f1117;
+  }
+</style>

@@ -2,8 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs';
 import ArticleTree from '../components/ArticleTree';
+import SketchCard from '../components/SketchCard.astro';
 import { buildNavigation, flattenArticles, type NavArticle } from '../lib/navigation';
 import { getModuleByDir } from '../lib/modules';
+import { getSketchModule } from '../lib/knowledge-sketches';
+import { withBase } from '../lib/paths';
 
 export function getStaticPaths() {
   const nav = buildNavigation();
@@ -15,6 +18,7 @@ export function getStaticPaths() {
 
 const { mod } = Astro.props;
 const moduleInfo = getModuleByDir(mod.slug);
+const sketchModule = getSketchModule(mod.slug);
 const articles = flattenArticles(mod.children);
 
 const RECOMMENDED_BY_MODULE: Record<string, string[][]> = {
@@ -72,11 +76,38 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
           <h1 class="text-2xl font-bold" style="color: var(--text-primary)">{mod.title}</h1>
         </div>
         <p class="mb-4 text-base" style="color: var(--text-secondary)">{moduleInfo?.description}</p>
-        <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold" style="background: var(--accent); color: #0f1117">
-          共 {mod.articleCount} 篇文章
-        </span>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold" style="background: var(--accent); color: #0f1117">
+            共 {mod.articleCount} 篇文章
+          </span>
+          {sketchModule && (
+            <a href={withBase(`/sketches/#${mod.slug}`)} class="inline-block px-3 py-1 rounded-full text-sm font-semibold transition-colors" style="background: var(--bg-secondary); color: var(--accent); border: 1px solid var(--border)">
+              看 3 页手绘核心图
+            </a>
+          )}
+        </div>
       </div>
     </div>
+
+    {sketchModule && (
+      <section class="mb-8 p-5 rounded-xl" style="background: var(--bg-card); border: 1px solid var(--border)">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-4">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--accent)">Hand-drawn core</p>
+            <h2 class="text-base font-bold mb-1" style="color: var(--text-primary)">本模块 3 页手绘核心图</h2>
+            <p class="text-sm" style="color: var(--text-secondary)">{sketchModule.aiLens}</p>
+          </div>
+          <a href={withBase(`/sketches/#${mod.slug}`)} class="sketch-more-link">
+            打开更多手绘知识点
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {sketchModule.sketches.map((sketch, index) => (
+            <SketchCard sketch={sketch} index={index} moduleName={sketchModule.moduleName} compact />
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- 学习路线 + 知识点推荐 -->
     {moduleInfo && (moduleInfo.learning_path.length > 0 || moduleInfo.highlights.length > 0) && (
@@ -169,3 +200,25 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .sketch-more-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .sketch-more-link:hover {
+    background: var(--bg-card-hover);
+    color: var(--accent);
+  }
+</style>

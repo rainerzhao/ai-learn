@@ -1,0 +1,282 @@
+---
+import type { KnowledgeSketch } from '../lib/knowledge-sketches';
+
+interface Props {
+  sketch: KnowledgeSketch;
+  index: number;
+  moduleName?: string;
+  compact?: boolean;
+}
+
+const { sketch, index, moduleName, compact = false } = Astro.props;
+const nodes = [...sketch.nodes, '', '', ''].slice(0, 3);
+const flow = sketch.flow.slice(0, 4);
+const cardId = `sketch-${sketch.slug}-${index}`;
+---
+
+<article class:list={['sketch-card', compact && 'sketch-card--compact']} id={cardId} style={`--sketch-accent: ${sketch.accent}`}>
+  <div class="sketch-card__paper">
+    <div class="sketch-card__meta">
+      <span>PAGE {String(index + 1).padStart(2, '0')}</span>
+      {moduleName && <span>{moduleName}</span>}
+    </div>
+
+    <svg class="sketch-card__drawing" style={`filter: url(#${cardId}-rough)`} viewBox="0 0 640 360" role="img" aria-labelledby={`${cardId}-title ${cardId}-desc`}>
+      <title id={`${cardId}-title`}>{sketch.title}</title>
+      <desc id={`${cardId}-desc`}>{sketch.thesis}</desc>
+      <defs>
+        <filter id={`${cardId}-rough`}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed={index + 7} result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
+        </filter>
+      </defs>
+
+      <path class="sketch-line pale" d="M58 82 C148 68 245 76 338 66 S500 70 586 56" />
+      <path class="sketch-line pale" d="M58 302 C166 315 258 300 357 312 S518 305 584 292" />
+
+      <text class="sketch-title" x="58" y="66">{sketch.title}</text>
+      <text class="sketch-question" x="58" y="92">{sketch.question}</text>
+
+      <path class="sketch-cable" d="M128 178 C188 128 244 128 304 178 S421 228 506 168" />
+      <path class="sketch-arrow" d="M500 158 L520 166 L502 178" />
+
+      <g class="sketch-node-group">
+        <path class="sketch-tag warm" d="M76 126 C116 116 160 118 190 130 L182 211 C143 204 107 213 73 202 Z" />
+        <text class="sketch-node" x="132" y="168" text-anchor="middle">{nodes[0]}</text>
+      </g>
+
+      <g class="xiaohei" aria-hidden="true">
+        <path class="xiaohei-arm" d="M284 190 C246 173 221 166 194 166" />
+        <path class="xiaohei-arm" d="M354 190 C394 178 423 172 458 172" />
+        <path class="xiaohei-body" d="M287 144 C315 121 354 135 366 168 C381 209 353 245 315 237 C276 229 258 174 287 144 Z" />
+        <circle class="xiaohei-eye" cx="307" cy="174" r="6" />
+        <circle class="xiaohei-eye" cx="341" cy="174" r="6" />
+        <path class="xiaohei-mouth" d="M312 202 C324 211 340 208 348 198" />
+        <path class="xiaohei-ear" d="M298 146 L288 121 L314 137" />
+        <path class="xiaohei-ear" d="M349 144 L367 122 L360 153" />
+      </g>
+
+      <g class="sketch-node-group">
+        <path class="sketch-tag cool" d="M238 100 C289 88 344 96 386 113 L378 252 C326 242 278 251 232 236 Z" />
+        <text class="sketch-node" x="312" y="126" text-anchor="middle">{nodes[1]}</text>
+      </g>
+
+      <g class="sketch-node-group">
+        <path class="sketch-tag blue" d="M448 118 C494 107 544 119 571 144 L552 220 C510 211 472 219 433 204 Z" />
+        <text class="sketch-node" x="504" y="164" text-anchor="middle">{nodes[2]}</text>
+      </g>
+
+      <path class="sketch-box note-box" d="M74 258 C170 246 252 255 337 249 S496 252 567 264 L557 318 C430 309 330 321 212 315 S101 320 70 305 Z" />
+      <text class="sketch-note" x="96" y="283">{sketch.note}</text>
+      <text class="sketch-flow" x="96" y="306">{flow.join(' / ')}</text>
+    </svg>
+
+    <div class="sketch-card__copy">
+      <p>{sketch.thesis}</p>
+      <div class="sketch-card__chips">
+        {sketch.nodes.map(node => <span>{node}</span>)}
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .sketch-card {
+    min-width: 0;
+  }
+
+  .sketch-card__paper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border: 1.5px solid color-mix(in srgb, var(--sketch-accent) 32%, var(--border));
+    border-radius: 8px;
+    background: #fffdf7;
+    color: #17201d;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .sketch-card__paper {
+    background: #fffdf7;
+  }
+
+  .sketch-card__meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.72rem 0.92rem 0;
+    color: rgba(23, 32, 29, 0.48);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .sketch-card__drawing {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: -0.1rem;
+  }
+
+  .sketch-line,
+  .sketch-box,
+  .sketch-arrow,
+  .sketch-tag,
+  .xiaohei-arm,
+  .xiaohei-mouth,
+  .xiaohei-ear {
+    fill: none;
+    stroke: #17201d;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sketch-line.pale {
+    opacity: 0.18;
+    stroke-width: 2;
+  }
+
+  .sketch-cable {
+    fill: none;
+    stroke: #f59e0b;
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sketch-arrow {
+    stroke: #f59e0b;
+    stroke-width: 4;
+  }
+
+  .note-box {
+    fill: rgba(255, 255, 255, 0.7);
+  }
+
+  .sketch-tag {
+    stroke-dasharray: 9 7;
+  }
+
+  .sketch-tag.warm {
+    fill: rgba(245, 158, 11, 0.12);
+    stroke: #f59e0b;
+  }
+
+  .sketch-tag.cool {
+    fill: rgba(226, 74, 59, 0.1);
+    stroke: #e24a3b;
+  }
+
+  .sketch-tag.blue {
+    fill: rgba(29, 126, 208, 0.1);
+    stroke: #1d7ed0;
+  }
+
+  .xiaohei-body,
+  .xiaohei-ear {
+    fill: #151515;
+    stroke: #151515;
+  }
+
+  .xiaohei-arm,
+  .xiaohei-mouth {
+    stroke: #151515;
+  }
+
+  .xiaohei-eye {
+    fill: #fffdf7;
+    stroke: #151515;
+    stroke-width: 2;
+  }
+
+  .sketch-title,
+  .sketch-question,
+  .sketch-node,
+  .sketch-note,
+  .sketch-flow {
+    fill: #17201d;
+    font-family: 'Ma Shan Zheng', 'KaiTi', cursive;
+  }
+
+  .sketch-title {
+    font-size: 28px;
+  }
+
+  .sketch-question,
+  .sketch-note {
+    font-size: 18px;
+  }
+
+  .sketch-node {
+    font-size: 18px;
+  }
+
+  .sketch-flow {
+    fill: #e24a3b;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .sketch-card__copy {
+    position: relative;
+    z-index: 1;
+    padding: 0 1rem 1rem;
+  }
+
+  .sketch-card__copy p {
+    margin: 0;
+    color: rgba(23, 32, 29, 0.76);
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  .sketch-card__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  .sketch-card__chips span {
+    border: 1px solid color-mix(in srgb, var(--sketch-accent) 48%, rgba(23, 32, 29, 0.2));
+    border-radius: 999px;
+    padding: 0.16rem 0.48rem;
+    background: color-mix(in srgb, var(--sketch-accent) 10%, rgba(255, 255, 255, 0.66));
+    color: #17201d;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .sketch-card--compact .sketch-card__copy {
+    display: none;
+  }
+
+  .sketch-card--compact .sketch-card__drawing {
+    margin-bottom: -0.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .sketch-card__meta {
+      font-size: 0.65rem;
+    }
+
+    .sketch-title {
+      font-size: 23px;
+    }
+
+    .sketch-node {
+      font-size: 16px;
+    }
+
+    .sketch-note {
+      font-size: 15px;
+    }
+  }
+</style>

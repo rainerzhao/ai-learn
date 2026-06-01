@@ -112,6 +112,10 @@ export default function Header() {
               标签
             </a>
 
+            <a href={withBase('/sketches/')} className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+              手绘图
+            </a>
+
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg transition-colors"
@@ -183,6 +187,9 @@ export default function Header() {
             <div className="flex items-center gap-4 mt-4 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
               <a href={withBase('/tags/')} className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                 标签
+              </a>
+              <a href={withBase('/sketches/')} className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+                手绘图
               </a>
               <button onClick={toggleTheme} className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                 {dark ? '☀ 浅色' : '🌙 深色'}
