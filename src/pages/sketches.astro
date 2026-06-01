@@ -7,6 +7,75 @@ import { withBase } from '../lib/paths';
 
 const totalSketches = countSketches();
 const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum + track.sketches.length, 0);
+const STORY_CHAPTERS = [
+  {
+    id: 'story-rename',
+    title: '先把旧能力重新命名',
+    scene: 'IaaS 架构师不是从零开始，而是把资源池、控制面、交付经验翻译成 token 工厂、模型生命周期和 GPU 物理约束。',
+    why: '读完这一幕，先建立转型心智：你过去管的是机器，现在要管智能吞吐。',
+    transitionIds: ['iaas-ai-mental-model'],
+    moduleDirs: ['01_hardware_architecture'],
+  },
+  {
+    id: 'story-compute',
+    title: '再看清 AI 的算力底座',
+    scene: '当模型变成工作负载，瓶颈会从 CPU/内存利用率转向 GPU 显存、HBM、Kernel、互联网络、存储和容量曲线。',
+    why: '这一幕回答“为什么同样有卡，有的平台跑得稳，有的平台一直慢”。',
+    transitionIds: ['iaas-ai-capacity', 'iaas-ai-network-storage'],
+    moduleDirs: ['02_gpu_programming', '03_ai_cluster_operations', '04_cloud_native_ai_platform'],
+  },
+  {
+    id: 'story-model',
+    title: '然后让模型成为平台对象',
+    scene: 'AI 架构不是只部署一个服务，而是管理训练、微调、评测、版本、上下文、模型行为和服务运行时。',
+    why: '这一幕把算法概念变成平台可以管理、观测、发布和回滚的对象。',
+    transitionIds: [],
+    moduleDirs: ['05_model_training_and_fine_tuning', '06_llm_theory_and_foundation', '09_inference_system'],
+  },
+  {
+    id: 'story-application',
+    title: '接着把模型接进真实工作流',
+    scene: '模型要通过 RAG、工具、Agent、代码接口和业务流程产生价值；这里开始从“能回答”走向“能办事”。',
+    why: '这一幕说明 AI 架构师为什么必须懂上下文、工具协议、状态和失败边界。',
+    transitionIds: ['iaas-ai-delivery'],
+    moduleDirs: ['07_rag_and_tools', '08_agentic_system', '98_llm_programming'],
+  },
+  {
+    id: 'story-govern',
+    title: '最后把智能系统运营起来',
+    scene: '上线以后，真正难的是 SLO、质量观测、安全隔离、模型供应链、FinOps 和持续治理。',
+    why: '这一幕把 IaaS 的 SRE、安全和成本优势迁移到 AI 世界，是转型最能拉开差距的部分。',
+    transitionIds: ['iaas-ai-platform-sre', 'iaas-ai-security', 'iaas-ai-cost-finops'],
+    moduleDirs: ['99_tools_and_misc'],
+  },
+  {
+    id: 'story-roadmap',
+    title: '收束成 30/90/180 天路线图',
+    scene: '前面都是能力地图，最后要落到可执行节奏：补语言、做链路、沉淀平台能力。',
+    why: '这一幕让学习顺序变成行动计划，而不是继续收藏知识点。',
+    transitionIds: ['iaas-ai-roadmap'],
+    moduleDirs: ['10_ai_related_course'],
+  },
+];
+
+const storyChapters = STORY_CHAPTERS.map((chapter, index) => {
+  const tracks = chapter.transitionIds
+    .map(id => IAAS_TRANSITION_TRACKS.find(track => track.id === id))
+    .filter(Boolean);
+  const modules = chapter.moduleDirs
+    .map(moduleDir => SKETCH_MODULES.find(module => module.moduleDir === moduleDir))
+    .filter(Boolean);
+  const cardCount = tracks.reduce((sum, track) => sum + track.sketches.length, 0)
+    + modules.reduce((sum, module) => sum + module.sketches.length, 0);
+
+  return {
+    ...chapter,
+    index,
+    tracks,
+    modules,
+    cardCount,
+  };
+});
 ---
 
 <BaseLayout title="手绘知识卡" description="每个 AI 基础设施模块最核心的手绘知识点总览">
@@ -23,8 +92,8 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
             与 AI 自身的“表示、上下文、评测、协议、系统边界、经济学”合在一张转型地图里。
           </p>
           <div class="sketch-hero__actions">
-            <a href="#iaas-transition" class="sketch-button">看转型路线</a>
-            <a href="#all-sketches" class="sketch-button">开始看图</a>
+            <a href="#storyline" class="sketch-button">按故事线读</a>
+            <a href="#iaas-transition" class="sketch-button">看转型地图</a>
             <a href={withBase('/#modules')} class="sketch-button sketch-button--ghost">回到模块</a>
           </div>
         </div>
@@ -36,6 +105,28 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
           <strong>{IAAS_TRANSITION_TRACKS.length}</strong>
           <span>IaaS 转型专题</span>
         </div>
+      </section>
+
+      <section id="storyline" class="storyline">
+        <div class="storyline__head">
+          <p class="sketch-kicker">Reading storyline</p>
+          <h2>60 张卡要按 6 幕读，不要按目录硬啃</h2>
+          <p>
+            这条线的主角是一个 IaaS 运维架构师：先把旧经验翻译成 AI 语言，再补算力底座、模型平台、应用工作流，
+            最后回到 SRE、安全、成本和路线图。
+          </p>
+        </div>
+        <ol class="storyline__steps" aria-label="手绘卡片故事线">
+          {storyChapters.map(chapter => (
+            <li>
+              <a href={`#${chapter.id}`}>
+                <span>{String(chapter.index + 1).padStart(2, '0')}</span>
+                <strong>{chapter.title}</strong>
+                <em>{chapter.cardCount} 张卡</em>
+              </a>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section id="iaas-transition" class="transition-board">
@@ -74,51 +165,76 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
         </div>
 
         <div class="track-nav" aria-label="IaaS 转 AI 架构专题导航">
-          {IAAS_TRANSITION_TRACKS.map(track => (
-            <a href={`#${track.id}`}>{track.icon}{track.name}</a>
+          {storyChapters.map(chapter => (
+            <a href={`#${chapter.id}`}>{chapter.index + 1}. {chapter.title}</a>
           ))}
         </div>
 
-        <div class="all-sketches">
-          {IAAS_TRANSITION_TRACKS.map(track => (
-            <section class="module-sketch-block transition-track" id={track.id}>
-              <div class="module-sketch-block__head">
+        <div class="story-chapters">
+          {storyChapters.map(chapter => (
+            <section class="story-chapter" id={chapter.id}>
+              <div class="story-chapter__head">
                 <div>
-                  <p class="sketch-kicker">Transition track</p>
-                  <h2><span>{track.icon}</span>{track.name}</h2>
-                  <p>{track.lens}</p>
+                  <p class="sketch-kicker">Chapter {String(chapter.index + 1).padStart(2, '0')}</p>
+                  <h2>{chapter.title}</h2>
+                  <p>{chapter.scene}</p>
+                </div>
+                <div class="story-chapter__why">
+                  <span>为什么先读</span>
+                  <p>{chapter.why}</p>
                 </div>
               </div>
-              <div class="sketch-grid">
-                {track.sketches.map((sketch, index) => (
-                  <SketchCard sketch={sketch} index={index} moduleName={track.name} />
+
+              <div class="story-chapter__map">
+                {[...chapter.tracks, ...chapter.modules].map(item => (
+                  <a href={`#${'moduleDir' in item ? item.moduleDir : item.id}`}>
+                    {'icon' in item && item.icon}
+                    {'moduleName' in item ? item.moduleName : item.name}
+                  </a>
+                ))}
+              </div>
+
+              <div class="story-chapter__groups">
+                {chapter.tracks.map(track => (
+                  <section class="module-sketch-block transition-track" id={track.id}>
+                    <div class="module-sketch-block__head">
+                      <div>
+                        <p class="sketch-kicker">Transition track</p>
+                        <h3><span>{track.icon}</span>{track.name}</h3>
+                        <p>{track.lens}</p>
+                      </div>
+                    </div>
+                    <div class="sketch-grid">
+                      {track.sketches.map((sketch, index) => (
+                        <SketchCard sketch={sketch} index={index} moduleName={track.name} />
+                      ))}
+                    </div>
+                  </section>
+                ))}
+
+                {chapter.modules.map(module => (
+                  <section class="module-sketch-block" id={module.moduleDir}>
+                    <div class="module-sketch-block__head">
+                      <div>
+                        <p class="sketch-kicker">Module {module.moduleId}</p>
+                        <h3><span>{module.icon}</span>{module.moduleName}</h3>
+                        <p>{module.aiLens}</p>
+                      </div>
+                      <a class="module-link" href={withBase(`/${module.moduleDir}/`)}>
+                        进入模块
+                      </a>
+                    </div>
+                    <div class="sketch-grid">
+                      {module.sketches.map((sketch, index) => (
+                        <SketchCard sketch={sketch} index={index} moduleName={module.moduleName} />
+                      ))}
+                    </div>
+                  </section>
                 ))}
               </div>
             </section>
           ))}
         </div>
-      </section>
-
-      <section id="all-sketches" class="all-sketches">
-        {SKETCH_MODULES.map(module => (
-          <section class="module-sketch-block" id={module.moduleDir}>
-            <div class="module-sketch-block__head">
-              <div>
-                <p class="sketch-kicker">Module {module.moduleId}</p>
-                <h2><span>{module.icon}</span>{module.moduleName}</h2>
-                <p>{module.aiLens}</p>
-              </div>
-              <a class="module-link" href={withBase(`/${module.moduleDir}/`)}>
-                进入模块
-              </a>
-            </div>
-            <div class="sketch-grid">
-              {module.sketches.map((sketch, index) => (
-                <SketchCard sketch={sketch} index={index} moduleName={module.moduleName} />
-              ))}
-            </div>
-          </section>
-        ))}
       </section>
     </div>
   </div>
@@ -254,6 +370,81 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
   .sketch-hero__stats span {
     color: var(--text-secondary);
     font-size: 0.88rem;
+  }
+
+  .storyline {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, transparent), color-mix(in srgb, var(--bg-secondary) 96%, transparent)),
+      repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in srgb, var(--accent) 5%, transparent) 32px 33px);
+  }
+
+  .storyline__head {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .storyline h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    line-height: 1.16;
+  }
+
+  .storyline__head p:not(.sketch-kicker) {
+    max-width: 58rem;
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .storyline__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0.7rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .storyline__steps a {
+    display: grid;
+    min-height: 8.6rem;
+    align-content: space-between;
+    gap: 0.7rem;
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border));
+    border-radius: 8px;
+    padding: 0.85rem;
+    background: color-mix(in srgb, var(--bg-card) 86%, transparent);
+    color: var(--text-primary);
+  }
+
+  .storyline__steps a:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .storyline__steps span {
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .storyline__steps strong {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .storyline__steps em {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 800;
   }
 
   .ai-lens {
@@ -397,10 +588,82 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
     color: var(--accent-warm);
   }
 
-  .all-sketches {
+  .story-chapters,
+  .story-chapter__groups {
     display: grid;
     gap: 1.35rem;
     margin-top: 1.5rem;
+  }
+
+  .story-chapter {
+    scroll-margin-top: 5rem;
+    padding: 1rem;
+    border: 1px solid color-mix(in srgb, var(--accent-warm) 28%, var(--border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--bg-card) 76%, transparent);
+  }
+
+  .story-chapter__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  @media (min-width: 860px) {
+    .story-chapter__head {
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
+      align-items: start;
+    }
+  }
+
+  .story-chapter__head h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.2;
+  }
+
+  .story-chapter__head p:not(.sketch-kicker),
+  .story-chapter__why p {
+    margin: 0.45rem 0 0;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .story-chapter__why {
+    border-left: 3px solid var(--accent-warm);
+    padding: 0.15rem 0 0.15rem 0.85rem;
+  }
+
+  .story-chapter__why span {
+    color: var(--accent-warm);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .story-chapter__map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .story-chapter__map a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.32rem 0.6rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .story-chapter__map a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .module-sketch-block {
@@ -430,7 +693,7 @@ const transitionSketchCount = IAAS_TRANSITION_TRACKS.reduce((sum, track) => sum 
     }
   }
 
-  .module-sketch-block h2 {
+  .module-sketch-block h3 {
     display: flex;
     align-items: center;
     gap: 0.55rem;
