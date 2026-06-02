@@ -54,6 +54,79 @@ const RECOMMENDED_BY_MODULE: Record<string, string[][]> = {
   ],
 };
 
+const MODULE_CHECKPOINTS: Record<string, string[]> = {
+  '01_hardware_architecture': [
+    'GPU 架构里 SM、显存、HBM 带宽和互联分别影响哪类 AI 工作负载？',
+    '训练、推理、研发三类场景的 GPU 选型指标有什么不同？',
+    'PCIe、NVLink、GPUDirect 在集群数据路径里各解决什么问题？',
+    '为什么不能只用 TFLOPS 判断 AI 基础设施能力？',
+  ],
+  '02_gpu_programming': [
+    '一个 CUDA kernel 的线程、block、grid 如何映射到 GPU 执行资源？',
+    '什么时候瓶颈来自访存，什么时候来自计算或同步？',
+    'Triton/TileLang 这类 DSL 适合替代哪些手写 CUDA 场景？',
+    '如何用 profiler 判断优化方向，而不是靠猜？',
+  ],
+  '03_ai_cluster_operations': [
+    'GPU 节点健康、驱动、容器运行时和作业调度之间如何联动排障？',
+    'InfiniBand、RoCE 和 NCCL 问题会怎样表现为训练慢或失败？',
+    'AI 集群需要哪些容量、利用率、故障和作业级观测指标？',
+    '如何把运维 SOP 沉淀成可复制的平台能力？',
+  ],
+  '04_cloud_native_ai_platform': [
+    'Kubernetes 如何表达 GPU 资源、队列、配额和作业生命周期？',
+    'GPU 共享、MIG、虚拟化分别适合哪些平台场景？',
+    'AI 平台的控制面为什么要理解模型、数据集、评测和运行时？',
+    '弹性调度如何同时服务研发体验、集群利用率和成本目标？',
+  ],
+  '05_model_training_and_fine_tuning': [
+    '预训练、SFT、RLHF 和评测阶段对数据、算力和平台能力有什么差异？',
+    'LoRA/QLoRA 等参数高效微调降低了哪些成本，又引入哪些治理问题？',
+    '分布式训练的并行策略如何改变网络、显存和 checkpoint 压力？',
+    '一个模型训练任务上线前需要哪些版本和评测门禁？',
+  ],
+  '06_llm_theory_and_foundation': [
+    'Transformer 的 attention、位置编码和上下文窗口如何影响系统设计？',
+    'Embedding、token、latent space 与 RAG/Agent 架构有什么关系？',
+    '量化、MoE 和上下文扩展分别在质量、成本、延迟上交换了什么？',
+    '为什么模型能力边界必须通过评测和业务反馈持续校准？',
+  ],
+  '07_rag_and_tools': [
+    '一个 RAG 系统的检索、重排、生成和引用链路分别承担什么责任？',
+    '什么时候需要 GraphRAG 或知识图谱，而不是普通向量检索？',
+    '文档解析质量如何影响召回、幻觉和最终业务可信度？',
+    '工具调用的 schema、权限和错误处理应该在哪里被治理？',
+  ],
+  '08_agentic_system': [
+    'Agent 的目标、状态、工具、记忆和反馈回路如何组成稳定工作流？',
+    '多智能体系统什么时候有价值，什么时候只是增加协调成本？',
+    'MCP 这类协议如何改变工具集成、权限边界和平台控制面？',
+    'Agent 失败时应该观测哪些链路，而不是只看最终回答？',
+  ],
+  '09_inference_system': [
+    'TTFT、TPOT、吞吐、并发和尾延迟之间如何互相制约？',
+    'KV Cache、prefix caching、offloading 分别优化了哪部分推理成本？',
+    'vLLM 的调度和内存管理为什么会影响服务稳定性？',
+    '如何按 token 曲线而不是只按 QPS 做推理容量规划？',
+  ],
+  '10_ai_related_course': [
+    '30/90/180 天转型计划分别应该补哪些基础、做哪些链路、沉淀哪些能力？',
+    '如何把课程内容映射到真实平台、推理或应用架构任务？',
+    '哪些知识适合先广度扫盲，哪些必须通过项目深挖？',
+  ],
+  '98_llm_programming': [
+    'LangGraph、Spring AI 和 Harness 工程分别解决应用架构里的哪类问题？',
+    '如何把 prompt、工具、状态和事件流封装成可维护的代码接口？',
+    'LLM 应用的失败重试、权限、审计和观测应该如何落到工程实现？',
+    '代码层面的 Agent 编排与平台侧治理如何分工？',
+  ],
+  '99_tools_and_misc': [
+    '本地模型部署、benchmark 和工具链如何服务选型与压测？',
+    'AI 平台的安全、供应链和成本工具应该覆盖哪些关键风险？',
+    '如何判断一个工具是临时脚本、团队标准，还是平台能力的一部分？',
+  ],
+};
+
 function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
   const fragments = RECOMMENDED_BY_MODULE[mod.slug]?.[stepIndex] ?? [];
   return fragments
@@ -61,6 +134,12 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
     .filter(Boolean)
     .slice(0, 2) as NavArticle[];
 }
+
+const moduleCheckpoints = MODULE_CHECKPOINTS[mod.slug] ?? [
+  '这个模块解决的核心架构问题是什么？',
+  '完成本模块后，哪些概念可以迁移到你的实际系统？',
+  '下一步应该进入哪条转型路线或哪个相邻模块？',
+];
 ---
 
 <BaseLayout title={mod.title} description={moduleInfo?.description}>
@@ -109,29 +188,39 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
       </section>
     )}
 
-    <!-- 学习路线 + 知识点推荐 -->
+    <!-- 学习任务 + 知识点推荐 -->
     {moduleInfo && (moduleInfo.learning_path.length > 0 || moduleInfo.highlights.length > 0) && (
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {moduleInfo.learning_path.length > 0 && (
           <div class="p-5 rounded-xl" style="background: var(--bg-card); border: 1px solid var(--border)">
             <h2 class="text-base font-bold mb-4 flex items-center gap-2" style="color: var(--accent)">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
-              学习路线
+              本模块学习任务
             </h2>
             <div class="space-y-3">
               {moduleInfo.learning_path.map((step, i) => {
                 const recommended = recommendedArticlesForStep(i);
+                const coreSketch = sketchModule?.sketches[i];
                 return (
-                <div class="flex gap-3 items-start">
-                  <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background: var(--accent); color: #0f1117">
+                <div class="learning-task">
+                  <div class="learning-task__num" style="background: var(--accent); color: #0f1117">
                     {i + 1}
                   </div>
-                  <div>
+                  <div class="learning-task__body">
                     <div class="font-medium text-sm" style="color: var(--text-primary)">{step.step}</div>
                     <div class="text-xs mt-0.5" style="color: var(--text-muted)">{step.desc}</div>
-                    {recommended.length > 0 && (
-                      <div class="mt-2 flex flex-wrap gap-1.5">
-                        {recommended.map((article: NavArticle) => (
+
+                    {coreSketch && (
+                      <a href={withBase(`/sketches/#${mod.slug}`)} class="learning-task__sketch">
+                        <span>核心图 {String(i + 1).padStart(2, '0')}</span>
+                        <strong>{coreSketch.title}</strong>
+                        <em>{coreSketch.question}</em>
+                      </a>
+                    )}
+
+                    <div class="mt-2 flex flex-wrap gap-1.5">
+                      {recommended.length > 0 ? (
+                        recommended.map((article: NavArticle) => (
                           <a
                             href={article.href}
                             class="route-chip inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
@@ -139,9 +228,13 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
                           >
                             {article.title}
                           </a>
-                        ))}
-                      </div>
-                    )}
+                        ))
+                      ) : (
+                        <span class="route-chip route-chip--muted inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold">
+                          暂无精选文章，先按下方文章目录顺序阅读
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 );
@@ -166,6 +259,18 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
         )}
       </div>
     )}
+
+    <section class="checkpoint-panel mb-8">
+      <div>
+        <p class="checkpoint-panel__kicker">Module checkpoints</p>
+        <h2>完成本模块后，你应该能回答</h2>
+      </div>
+      <ol class="checkpoint-panel__list">
+        {moduleCheckpoints.map((question: string) => (
+          <li>{question}</li>
+        ))}
+      </ol>
+    </section>
 
     <!-- 文章目录 + 全部文章 -->
     <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
@@ -220,5 +325,126 @@ function recommendedArticlesForStep(stepIndex: number): NavArticle[] {
   .sketch-more-link:hover {
     background: var(--bg-card-hover);
     color: var(--accent);
+  }
+
+  .learning-task {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .learning-task__num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .learning-task__body {
+    min-width: 0;
+  }
+
+  .learning-task__sketch {
+    display: grid;
+    gap: 0.2rem;
+    margin-top: 0.7rem;
+    border: 1px dashed color-mix(in srgb, var(--accent) 42%, var(--border));
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    background: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+    color: var(--text-primary);
+  }
+
+  .learning-task__sketch:hover {
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+  }
+
+  .learning-task__sketch span {
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .learning-task__sketch strong {
+    color: var(--text-primary);
+    font-size: 0.86rem;
+    line-height: 1.35;
+  }
+
+  .learning-task__sketch em {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-style: normal;
+    line-height: 1.45;
+  }
+
+  .route-chip--muted {
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+  }
+
+  .checkpoint-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    border-radius: 8px;
+    padding: 1.1rem;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 90%, transparent), color-mix(in srgb, var(--bg-secondary) 96%, transparent)),
+      repeating-linear-gradient(-3deg, transparent 0 20px, color-mix(in srgb, var(--accent) 5%, transparent) 21px 22px);
+  }
+
+  @media (min-width: 820px) {
+    .checkpoint-panel {
+      grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .checkpoint-panel__kicker {
+    margin: 0 0 0.45rem;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .checkpoint-panel h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    line-height: 1.35;
+  }
+
+  .checkpoint-panel__list {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checkpoint-panel__list li {
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 0.85rem;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
   }
 </style>

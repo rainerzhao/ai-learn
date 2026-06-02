@@ -13,6 +13,9 @@ const STORY_CHAPTERS = [
     title: '先把旧能力重新命名',
     scene: 'IaaS 架构师不是从零开始，而是把资源池、控制面、交付经验翻译成 token 工厂、模型生命周期和 GPU 物理约束。',
     why: '读完这一幕，先建立转型心智：你过去管的是机器，现在要管智能吞吐。',
+    goal: '把 IaaS 的资源交付、控制面和运维经验，改写成 AI Infra 的架构语言。',
+    outcome: '能说清“算力交付”和“智能吞吐交付”的差异，并列出自己已有能力的迁移清单。',
+    nextStep: [{ label: '继续看算力底座', href: '#story-compute' }],
     transitionIds: ['iaas-ai-mental-model'],
     moduleDirs: ['01_hardware_architecture'],
   },
@@ -21,6 +24,9 @@ const STORY_CHAPTERS = [
     title: '再看清 AI 的算力底座',
     scene: '当模型变成工作负载，瓶颈会从 CPU/内存利用率转向 GPU 显存、HBM、Kernel、互联网络、存储和容量曲线。',
     why: '这一幕回答“为什么同样有卡，有的平台跑得稳，有的平台一直慢”。',
+    goal: '建立 GPU、网络、存储、调度和容量规划之间的因果图。',
+    outcome: '能从训练和推理两类负载出发，判断瓶颈更可能在显存、互联、存储还是调度策略。',
+    nextStep: [{ label: '进入模型平台对象', href: '#story-model' }],
     transitionIds: ['iaas-ai-capacity', 'iaas-ai-network-storage'],
     moduleDirs: ['02_gpu_programming', '03_ai_cluster_operations', '04_cloud_native_ai_platform'],
   },
@@ -29,6 +35,12 @@ const STORY_CHAPTERS = [
     title: '然后让模型成为平台对象',
     scene: 'AI 架构不是只部署一个服务，而是管理训练、微调、评测、版本、上下文、模型行为和服务运行时。',
     why: '这一幕把算法概念变成平台可以管理、观测、发布和回滚的对象。',
+    goal: '把模型从“算法资产”提升为可发布、可观测、可回滚的平台对象。',
+    outcome: '能设计模型版本、评测、训练/微调、推理运行时之间的最小平台闭环。',
+    nextStep: [
+      { label: '接入 RAG/Agent 工作流', href: '#story-application' },
+      { label: '先看治理与 SRE', href: '#story-govern' },
+    ],
     transitionIds: [],
     moduleDirs: ['05_model_training_and_fine_tuning', '06_llm_theory_and_foundation', '09_inference_system'],
   },
@@ -37,6 +49,9 @@ const STORY_CHAPTERS = [
     title: '接着把模型接进真实工作流',
     scene: '模型要通过 RAG、工具、Agent、代码接口和业务流程产生价值；这里开始从“能回答”走向“能办事”。',
     why: '这一幕说明 AI 架构师为什么必须懂上下文、工具协议、状态和失败边界。',
+    goal: '把模型能力嵌入检索、工具调用、Agent 状态机和业务流程。',
+    outcome: '能画出一个 RAG/Agent 系统的上下文来源、工具边界、失败处理和可观测点。',
+    nextStep: [{ label: '补齐治理与运营', href: '#story-govern' }],
     transitionIds: ['iaas-ai-delivery'],
     moduleDirs: ['07_rag_and_tools', '08_agentic_system', '98_llm_programming'],
   },
@@ -45,6 +60,9 @@ const STORY_CHAPTERS = [
     title: '最后把智能系统运营起来',
     scene: '上线以后，真正难的是 SLO、质量观测、安全隔离、模型供应链、FinOps 和持续治理。',
     why: '这一幕把 IaaS 的 SRE、安全和成本优势迁移到 AI 世界，是转型最能拉开差距的部分。',
+    goal: '把 SRE、安全、成本和供应链治理迁移到模型与 Agent 系统。',
+    outcome: '能为 AI 平台定义质量观测、风险边界、成本归因和持续改进机制。',
+    nextStep: [{ label: '整理 30/90/180 天行动计划', href: '#story-roadmap' }],
     transitionIds: ['iaas-ai-platform-sre', 'iaas-ai-security', 'iaas-ai-cost-finops'],
     moduleDirs: ['99_tools_and_misc'],
   },
@@ -53,8 +71,29 @@ const STORY_CHAPTERS = [
     title: '收束成 30/90/180 天路线图',
     scene: '前面都是能力地图，最后要落到可执行节奏：补语言、做链路、沉淀平台能力。',
     why: '这一幕让学习顺序变成行动计划，而不是继续收藏知识点。',
+    goal: '把前 5 幕的能力地图压缩成可执行的阶段计划。',
+    outcome: '能拆出 30 天补基础、90 天做链路、180 天沉淀平台能力的个人转型路线。',
+    nextStep: [{ label: '回到首页选择模块', href: withBase('/#modules') }],
     transitionIds: ['iaas-ai-roadmap'],
     moduleDirs: ['10_ai_related_course'],
+  },
+];
+
+const ROLE_ROUTES = [
+  {
+    name: 'Infra 路线',
+    desc: '平台/运维 -> AI Infra 架构',
+    href: '#story-rename',
+  },
+  {
+    name: '平台路线',
+    desc: '云原生/SRE -> AI 平台架构',
+    href: '#story-model',
+  },
+  {
+    name: '应用路线',
+    desc: '应用架构 -> RAG/Agent 架构',
+    href: '#story-application',
   },
 ];
 
@@ -106,6 +145,15 @@ const storyChapters = STORY_CHAPTERS.map((chapter, index) => {
           <span>IaaS 转型专题</span>
         </div>
       </section>
+
+      <nav class="role-route-nav" aria-label="AI 架构转型路线导览">
+        {ROLE_ROUTES.map(route => (
+          <a href={route.href}>
+            <strong>{route.name}</strong>
+            <span>{route.desc}</span>
+          </a>
+        ))}
+      </nav>
 
       <section id="storyline" class="storyline">
         <div class="storyline__head">
@@ -192,6 +240,25 @@ const storyChapters = STORY_CHAPTERS.map((chapter, index) => {
                     {'moduleName' in item ? item.moduleName : item.name}
                   </a>
                 ))}
+              </div>
+
+              <div class="story-chapter__tasks" aria-label={`${chapter.title} 的学习任务`}>
+                <article>
+                  <span>本章目标</span>
+                  <p>{chapter.goal}</p>
+                </article>
+                <article>
+                  <span>读完产出</span>
+                  <p>{chapter.outcome}</p>
+                </article>
+                <article>
+                  <span>下一步</span>
+                  <div class="story-chapter__next">
+                    {chapter.nextStep.map(step => (
+                      <a href={step.href}>{step.label}</a>
+                    ))}
+                  </div>
+                </article>
               </div>
 
               <div class="story-chapter__groups">
@@ -370,6 +437,44 @@ const storyChapters = STORY_CHAPTERS.map((chapter, index) => {
   .sketch-hero__stats span {
     color: var(--text-secondary);
     font-size: 0.88rem;
+  }
+
+  .role-route-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .role-route-nav a {
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--border));
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+  }
+
+  .role-route-nav a:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .role-route-nav strong,
+  .role-route-nav span {
+    display: block;
+  }
+
+  .role-route-nav strong {
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+
+  .role-route-nav span {
+    margin-top: 0.25rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.5;
   }
 
   .storyline {
@@ -664,6 +769,59 @@ const storyChapters = STORY_CHAPTERS.map((chapter, index) => {
   .story-chapter__map a:hover {
     border-color: var(--accent);
     color: var(--accent);
+  }
+
+  .story-chapter__tasks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 0.75rem;
+    margin-top: 0.9rem;
+  }
+
+  .story-chapter__tasks article {
+    min-width: 0;
+    border: 1px dashed color-mix(in srgb, var(--accent-warm) 42%, var(--border));
+    border-radius: 8px;
+    padding: 0.85rem;
+    background: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+  }
+
+  .story-chapter__tasks span {
+    color: var(--accent-warm);
+    font-size: 0.76rem;
+    font-weight: 900;
+  }
+
+  .story-chapter__tasks p {
+    margin: 0.35rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  .story-chapter__next {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+  }
+
+  .story-chapter__next a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.25rem 0.6rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .story-chapter__next a:hover {
+    border-color: var(--accent-warm);
+    color: var(--accent-warm);
   }
 
   .module-sketch-block {
