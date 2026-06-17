@@ -4,7 +4,7 @@ modules:
   - id: "01"
     name: "硬件架构"
     icon: "⚡"
-    description: "GPU/TPU内部架构、片内互联、PCIe拓扑、GPUDirect技术"
+    description: "GPU/TPU内部架构、先进封装、NVL机柜、片内互联、PCIe拓扑、GPUDirect技术"
     priority: "P0"
     status: "pending"
     learning_path:
@@ -14,11 +14,15 @@ modules:
         desc: "NVLink、NVSwitch 的拓扑与带宽分析"
       - step: "学习 GPUDirect 技术"
         desc: "RDMA、P2P、CUDA IPC 实现零拷贝传输"
+      - step: "拆解先进封装与机柜成本"
+        desc: "2.5D/3D、ABF、玻璃基板、SerDes、NVL 机柜层级与成本结构"
     highlights:
       - "GPU 微架构演进：Ampere → Hopper → Blackwell"
       - "HBM3e 显存带宽与容量深度分析"
       - "NVLink 4.0 双向带宽 900GB/s"
       - "GPUDirect RDMA 实现原理与性能"
+      - "2.5D/3D 封装、ABF、玻璃基板与 SerDes 链路预算"
+      - "NVIDIA NVL 机柜：计算、互联、供电、液冷与系统集成成本拆解"
 
   - id: "02"
     name: "GPU编程"

@@ -3,7 +3,26 @@ import { withBase } from '../lib/paths';
 interface Props {
   moduleCount: number;
   articleCount: number;
+  sketchCount: number;
 }
+
+const targets = [
+  {
+    label: '30 天',
+    title: '补齐 AI Infra 底层语言',
+    desc: 'GPU、HBM、NVLink、PCIe、封装、机柜这些词能和成本、容量、故障联系起来。',
+  },
+  {
+    label: '90 天',
+    title: '能设计一条 AI 系统链路',
+    desc: '从训练/推理任务出发，画出资源池、调度、网络、存储、SLO 和观测闭环。',
+  },
+  {
+    label: '180 天',
+    title: '沉淀 AI 架构判断力',
+    desc: '能拆模型平台、推理服务、RAG/Agent、成本结构和技术更新节奏。',
+  },
+];
 
 const tracks = [
   {
@@ -32,7 +51,7 @@ const tracks = [
   },
 ];
 
-export default function HeroSection({ moduleCount, articleCount }: Props) {
+export default function HeroSection({ moduleCount, articleCount, sketchCount }: Props) {
   return (
     <section
       className="relative overflow-hidden"
@@ -52,8 +71,8 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
               color: 'var(--accent)',
             }}
           >
-            AI 基础设施知识库
-            <span style={{ color: 'var(--text-muted)' }}>持续整理中</span>
+            AI 架构转型驾驶舱
+            <span style={{ color: 'var(--text-muted)' }}>目标模式</span>
           </div>
           <h1
             className="mb-4"
@@ -66,20 +85,20 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
               fontFamily: "'Inter', sans-serif",
             }}
           >
-            给 IaaS 架构师的 AI 架构转型地图。
+            给 IaaS 架构师的 AI 架构目标模式。
           </h1>
           <p className="max-w-2xl mb-8 leading-relaxed" style={{ color: 'var(--text-secondary)', fontSize: '1.08rem' }}>
-            把资源池、网络、存储、SRE 和成本经验，翻译成 GPU 集群、模型平台、推理服务、
-            RAG 与 Agent 的架构任务流。不是资料堆场，而是一张能指导转型的路线产品。
+            把资源池、网络、存储、SRE 和成本经验，翻译成 GPU 集群、先进封装、NVL 机柜、
+            模型平台、推理服务、RAG 与 Agent 的架构任务流。目标不是看完资料，而是能做架构判断。
           </p>
 
           <div className="flex gap-3 flex-wrap mb-8">
             <a
-              href="#learning-routes"
+              href="#target-mode"
               className="inline-flex items-center px-5 py-2.5 rounded-lg font-bold text-sm text-white transition-all hover:-translate-y-0.5"
               style={{ background: 'var(--accent)', boxShadow: '0 10px 28px rgba(20,184,166,0.22)' }}
             >
-              选择转型路线
+              查看目标模式
             </a>
             <button
               type="button"
@@ -105,14 +124,14 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
               <span>文章</span>
             </div>
             <div className="hero-stat">
-              <strong>3</strong>
-              <span>学习路线</span>
+              <strong>{sketchCount}</strong>
+              <span>手绘卡片</span>
             </div>
           </div>
         </div>
 
         <div
-          id="learning-routes"
+          id="target-mode"
           className="rounded-xl p-4 sm:p-5"
           style={{
             background: 'var(--bg-card)',
@@ -123,10 +142,10 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
           <div className="flex items-center justify-between gap-3 mb-4">
             <div>
               <div className="text-xs font-semibold uppercase" style={{ color: 'var(--text-muted)' }}>
-                Architect routes
+                Target mode
               </div>
               <h2 className="text-xl font-extrabold" style={{ color: 'var(--text-primary)' }}>
-                你从哪个架构角色切入？
+                先定义转型结果，再选择路线
               </h2>
             </div>
             <a
@@ -140,6 +159,17 @@ export default function HeroSection({ moduleCount, articleCount }: Props) {
             </a>
           </div>
 
+          <div className="target-steps" aria-label="30/90/180 天目标模式">
+            {targets.map(target => (
+              <div className="target-step" key={target.label}>
+                <span>{target.label}</span>
+                <strong>{target.title}</strong>
+                <small>{target.desc}</small>
+              </div>
+            ))}
+          </div>
+
+          <div className="route-panel-label">按当前角色切入</div>
           <div className="space-y-3">
             {tracks.map((track, index) => (
               <a

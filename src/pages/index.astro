@@ -10,6 +10,52 @@ const nav = buildNavigation();
 const totalArticles = nav.reduce((sum, m) => sum + m.articleCount, 0);
 const totalSketches = countSketches();
 
+const architectureOutcomes = [
+  '拆清 GPU、CPU、HBM、NVLink、NVSwitch、网络、电力和散热的系统边界',
+  '把 2.5D/3D、ABF、玻璃基板、SerDes 放进 AI 集群成本与性能判断',
+  '从 IaaS 运维经验迁移到模型平台、推理服务、RAG/Agent 的治理闭环',
+  '建立每周更新、每月专题、来源分级和上线验收的知识维护节奏',
+];
+
+const hardwareTopics = [
+  {
+    title: '先进封装与高速互连',
+    desc: '2.5D、3D、ABF、玻璃基板、凸点、焊球、SerDes 链路预算。',
+    href: withBase('/01_hardware_architecture/advanced_packaging/'),
+  },
+  {
+    title: 'NVIDIA NVL 机柜成本拆解',
+    desc: '把 GPU、HBM、NVSwitch、网络、供电、液冷和系统集成拆成架构层。',
+    href: withBase('/01_hardware_architecture/advanced_packaging/03_nvidia_nvl_rack_cost_stack/'),
+  },
+  {
+    title: 'GB300 / Grace Blackwell 拓扑',
+    desc: '从 Superchip、NVLink-C2C、NVL4/NVL72 到推理容量规划。',
+    href: withBase('/01_hardware_architecture/superchips/nvidia_gb300/'),
+  },
+];
+
+const updateRhythm = [
+  {
+    cadence: '每周',
+    title: 'AI 知识雷达',
+    desc: '跟踪模型、推理框架、芯片、云厂商和开源工具的关键变化。',
+    href: withBase('/99_tools_and_misc/ai_knowledge_update_workflow/'),
+  },
+  {
+    cadence: '每月',
+    title: '深度专题入库',
+    desc: '把封装、机柜、网络、存储、推理成本、Agent 工程整理成可学习专题。',
+    href: withBase('/99_tools_and_misc/ai_knowledge_update_workflow/'),
+  },
+  {
+    cadence: '上线前',
+    title: '来源与体验验收',
+    desc: '标注官方/论文/媒体/分析师估算来源，并完成 build 与本地浏览器检查。',
+    href: withBase('/99_tools_and_misc/ai_knowledge_update_workflow/'),
+  },
+];
+
 function getModuleTags(mod: typeof nav[number]): string[] {
   const tagSet = new Set<string>();
   function collect(children: (NavSection | NavArticle)[]) {
@@ -24,7 +70,28 @@ function getModuleTags(mod: typeof nav[number]): string[] {
 ---
 
 <BaseLayout title="AI Fundamentals" description="完整的 AI 基础设施知识体系 — 从硬件到应用的全栈技术指南">
-  <HeroSection moduleCount={nav.length} articleCount={totalArticles} client:load />
+  <HeroSection moduleCount={nav.length} articleCount={totalArticles} sketchCount={totalSketches} client:load />
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+    <div class="outcome-board">
+      <div>
+        <p class="section-kicker">Outcome first</p>
+        <h2>目标模式：能做 AI 架构判断，而不是只收藏资料</h2>
+        <p>
+          每个模块都要回答一个问题：它如何帮助 IaaS 架构师判断成本、容量、性能、稳定性和治理边界。
+          手绘卡片负责解释核心概念，文章负责给出技术细节，路线负责把它们串成行动。
+        </p>
+      </div>
+      <div class="outcome-list">
+        {architectureOutcomes.map((item, index) => (
+          <div class="outcome-item">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{item}</strong>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
     <div class="sketch-entry">
@@ -40,6 +107,53 @@ function getModuleTags(mod: typeof nav[number]): string[] {
       <a href={withBase('/sketches/')} class="sketch-entry__button">
         进入转型路线
       </a>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+      <div>
+        <p class="section-kicker">Hardware deep dive</p>
+        <h2 class="text-2xl font-extrabold mb-2" style="color: var(--text-primary)">
+          从封装到机柜：把底层硬件拆成可学习的架构层
+        </h2>
+        <p style="color: var(--text-secondary)">
+          底层知识不再散落在文章里，而是进入硬件专题：先理解物理边界，再映射到性能、成本和运维判断。
+        </p>
+      </div>
+      <a href={withBase('/01_hardware_architecture/advanced_packaging/')} class="plain-action">
+        进入硬件专题
+      </a>
+    </div>
+    <div class="topic-grid">
+      {hardwareTopics.map(topic => (
+        <a href={topic.href} class="topic-card">
+          <strong>{topic.title}</strong>
+          <span>{topic.desc}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+    <div class="update-loop">
+      <div>
+        <p class="section-kicker">Knowledge update loop</p>
+        <h2>定期更新机制：让最新 AI 知识持续进入路线</h2>
+        <p>
+          后续更新按“发现 -> 判断 -> 入库 -> 验收”的流程执行。每条新知识都要说明来源可信度、
+          更新时间、对 IaaS 架构师的影响，以及应该落到哪个模块。
+        </p>
+      </div>
+      <div class="update-loop__steps">
+        {updateRhythm.map(item => (
+          <a href={item.href}>
+            <span>{item.cadence}</span>
+            <strong>{item.title}</strong>
+            <small>{item.desc}</small>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -114,5 +228,145 @@ function getModuleTags(mod: typeof nav[number]): string[] {
   .sketch-entry__button:hover {
     background: var(--accent-hover);
     color: #0f1117;
+  }
+
+  .section-kicker {
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .outcome-board,
+  .update-loop {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.15rem;
+    background:
+      radial-gradient(circle at top right, color-mix(in srgb, var(--accent-warm) 10%, transparent), transparent 34%),
+      var(--bg-card);
+    box-shadow: var(--soft-shadow);
+  }
+
+  .outcome-board h2,
+  .update-loop h2 {
+    margin-bottom: 0.55rem;
+    color: var(--text-primary);
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    font-weight: 900;
+    line-height: 1.25;
+  }
+
+  .outcome-board p,
+  .update-loop p {
+    color: var(--text-secondary);
+  }
+
+  .outcome-list,
+  .update-loop__steps {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .outcome-item,
+  .update-loop__steps > a,
+  .topic-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--bg-card) 84%, var(--accent) 4%);
+    padding: 0.9rem;
+  }
+
+  .outcome-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .outcome-item span,
+  .update-loop__steps span {
+    color: var(--accent);
+    font-size: 0.74rem;
+    font-weight: 900;
+  }
+
+  .outcome-item strong,
+  .update-loop__steps strong,
+  .topic-card strong {
+    display: block;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .update-loop__steps small,
+  .topic-card span {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .update-loop__steps > a {
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.18s, border-color 0.18s;
+  }
+
+  .update-loop__steps > a:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: inherit;
+  }
+
+  .plain-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.55rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .topic-card {
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.18s, border-color 0.18s;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: inherit;
+  }
+
+  @media (min-width: 760px) {
+    .outcome-board,
+    .update-loop {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      padding: 1.3rem;
+    }
+
+    .topic-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 </style>
