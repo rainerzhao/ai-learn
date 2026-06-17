@@ -6,6 +6,7 @@ import { getModuleByDir } from '../../lib/modules';
 import { withBase } from '../../lib/paths';
 import { isPublishableArticleId } from '../../lib/content-filters';
 import { buildNavigation, flattenArticles } from '../../lib/navigation';
+import { contentIdToHref } from '../../lib/content-routes';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ id }) => isPublishableArticleId(id));
@@ -13,7 +14,11 @@ export async function getStaticPaths() {
   return articles.map(entry => {
     const parts = entry.id.split('/');
     const moduleSlug = parts[0];
-    const slug = parts.slice(1).join('/');
+    const slugParts = parts.slice(1);
+    if (slugParts[slugParts.length - 1] === 'index') {
+      slugParts.pop();
+    }
+    const slug = slugParts.join('/');
 
     return {
       params: { module: moduleSlug, slug },
@@ -37,7 +42,7 @@ const date = entry.data.date || entry.data.last_updated || '';
 const nav = buildNavigation();
 const currentModule = nav.find(mod => mod.slug === moduleSlug);
 const moduleArticles = currentModule ? flattenArticles(currentModule.children) : [];
-const currentHref = withBase(`/${entry.id}`);
+const currentHref = contentIdToHref(entry.id);
 const currentIndex = moduleArticles.findIndex(article => article.href === currentHref);
 const previousArticle = currentIndex > 0 ? moduleArticles[currentIndex - 1] : undefined;
 const nextArticle = currentIndex >= 0 && currentIndex < moduleArticles.length - 1 ? moduleArticles[currentIndex + 1] : undefined;
@@ -52,7 +57,7 @@ const breadcrumbs = [
   title={title}
   breadcrumbs={breadcrumbs}
   tags={tags}
-  date={date ? String(date) : undefined}
+  date={date || undefined}
   previousArticle={previousArticle}
   nextArticle={nextArticle}
 >

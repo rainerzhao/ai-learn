@@ -18,7 +18,8 @@ export function isPublishableArticleId(id: string): boolean {
   const parts = id.split('/');
   const fileName = parts[parts.length - 1];
 
-  if (!fileName || fileName === 'index') return false;
+  if (!fileName) return false;
+  if (fileName === 'index' && parts.length <= 2) return false;
   if (EXCLUDED_CONTENT_FILES.has(`${fileName}.md`)) return false;
   if (parts.some(part => EXCLUDED_CONTENT_DIRS.has(part))) return false;
 

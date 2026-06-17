@@ -14,12 +14,21 @@ interface Props {
   description?: string;
   breadcrumbs: BreadcrumbItem[];
   tags?: string[];
-  date?: string;
+  date?: string | Date;
   previousArticle?: NavArticle;
   nextArticle?: NavArticle;
 }
 
 const { title, description, breadcrumbs, tags = [], date, previousArticle, nextArticle } = Astro.props;
+
+function formatDate(value: string | Date | undefined): string | undefined {
+  if (!value) return undefined;
+  const parsed = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(parsed.getTime())) return String(value);
+  return parsed.toISOString().slice(0, 10);
+}
+
+const displayDate = formatDate(date);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -30,7 +39,7 @@ const { title, description, breadcrumbs, tags = [], date, previousArticle, nextA
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4" style="color: var(--text-primary)">{title}</h1>
         <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted)">
-          {date && <time datetime={date}>{date}</time>}
+          {displayDate && <time datetime={displayDate}>{displayDate}</time>}
           {tags.length > 0 && (
             <div class="flex flex-wrap gap-2">
               {tags.map(tag => (

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../lib/paths';
 import { isPublishableArticleId } from '../../lib/content-filters';
+import { contentIdToHref } from '../../lib/content-routes';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ id }) => isPublishableArticleId(id));
@@ -48,7 +49,7 @@ const sorted = articles.sort((a, b) => {
       {sorted.map(article => {
         const parts = article.id.split('/');
         const moduleSlug = parts[0];
-        const href = withBase('/' + article.id);
+        const href = contentIdToHref(article.id);
         const title = article.data.title || article.id.split('/').pop()?.replace(/[-_]/g, ' ') || 'Untitled';
 
         return (

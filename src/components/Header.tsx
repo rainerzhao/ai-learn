@@ -27,7 +27,7 @@ const MODULES: Module[] = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(true);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const modules = MODULES;
 
   useEffect(() => {
@@ -46,17 +46,29 @@ export default function Header() {
   }
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+    function handlePointerDown(e: PointerEvent) {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
     }
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   return (
     <header
+      ref={headerRef}
       className="sticky top-0 z-50 backdrop-blur-md border-b"
       style={{
         background: dark ? 'rgba(16,20,25,0.86)' : 'rgba(248,250,252,0.88)',
@@ -74,11 +86,13 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-4">
             <SearchModal />
 
-            <div className="relative" ref={menuRef}>
+            <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="flex items-center gap-1 text-sm font-medium px-3 py-2 rounded-lg transition-colors"
                 style={{ color: 'var(--text-primary)' }}
+                aria-expanded={menuOpen}
+                aria-controls="desktop-module-menu"
               >
                 知识模块
                 <svg className={`w-4 h-4 transition-transform ${menuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,10 +101,12 @@ export default function Header() {
               </button>
               {menuOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[640px] p-4 rounded-xl shadow-2xl border grid grid-cols-3 gap-2"
+                  id="desktop-module-menu"
+                  className="absolute top-full right-0 mt-2 p-4 rounded-xl shadow-2xl border grid grid-cols-3 gap-2"
                   style={{
                     background: 'var(--bg-card)',
                     borderColor: 'var(--border)',
+                    width: 'min(640px, calc(100vw - 2rem))',
                   }}
                 >
                   {modules.map(mod => (
@@ -155,6 +171,8 @@ export default function Header() {
               onClick={() => setMenuOpen(!menuOpen)}
               style={{ color: 'var(--text-primary)' }}
               aria-label="菜单"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-site-menu"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {menuOpen ? (
@@ -169,7 +187,7 @@ export default function Header() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <nav className="md:hidden pb-4 border-t" style={{ borderColor: 'var(--border)' }}>
+          <nav id="mobile-site-menu" className="md:hidden pb-4 border-t" style={{ borderColor: 'var(--border)' }}>
             <div className="grid grid-cols-2 gap-2 pt-4">
               {modules.map(mod => (
                 <a
@@ -194,6 +212,15 @@ export default function Header() {
               <button onClick={toggleTheme} className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                 {dark ? '☀ 浅色' : '🌙 深色'}
               </button>
+              <a
+                href="https://github.com/rainerzhao/ai-learn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                GitHub
+              </a>
             </div>
           </nav>
         )}
