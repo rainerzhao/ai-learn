@@ -1,0 +1,148 @@
+<aside class="study-companion is-reading" aria-label="学习伙伴" data-study-companion>
+  <button type="button" class="study-companion__wake" title="唤醒陪读猫咪" aria-label="唤醒陪读猫咪" data-companion-wake hidden>
+    <span aria-hidden="true">🐾</span>
+  </button>
+
+  <div class="study-companion__bubble" data-companion-bubble>
+    <p data-companion-text>第一次来？从 GPU 基础和 CUDA 开始会顺很多。</p>
+    <button type="button" data-companion-action>找入门路线</button>
+  </div>
+
+  <button
+    type="button"
+    class="study-companion__body"
+    data-companion-body
+    aria-label="进入求助模式"
+  >
+    <svg class="study-companion__cat" viewBox="0 0 120 112" role="img" aria-hidden="true">
+      <path class="cat-tail" d="M89 74c21-12 25 13 12 18-10 4-19-2-17-11"></path>
+      <path class="cat-body" d="M31 61c1-18 13-31 30-31s30 13 30 31v14c0 17-12 27-30 27S31 92 31 75V61Z"></path>
+      <path class="cat-ear cat-ear-left" d="M38 38 44 14l17 20"></path>
+      <path class="cat-ear cat-ear-right" d="M82 38 76 14 59 34"></path>
+      <path class="cat-inner-ear cat-inner-ear-left" d="M43 34 46 22l9 12"></path>
+      <path class="cat-inner-ear cat-inner-ear-right" d="M77 34 74 22l-9 12"></path>
+      <path class="cat-face" d="M25 58c0-22 15-36 35-36s35 14 35 36c0 21-13 34-35 34S25 79 25 58Z"></path>
+      <path class="cat-patch" d="M51 23c8-6 18-3 23 3-2 8-7 13-14 13-6 0-10-5-9-16Z"></path>
+      <ellipse class="cat-eye" cx="47" cy="58" rx="4.5" ry="6"></ellipse>
+      <ellipse class="cat-eye" cx="73" cy="58" rx="4.5" ry="6"></ellipse>
+      <path class="cat-eye-shine" d="M45 55h2M71 55h2"></path>
+      <ellipse class="cat-cheek" cx="42" cy="69" rx="6" ry="3.2"></ellipse>
+      <ellipse class="cat-cheek" cx="78" cy="69" rx="6" ry="3.2"></ellipse>
+      <path class="cat-nose" d="M60 65 56 69h8l-4-4Z"></path>
+      <path class="cat-mouth" d="M60 70c-2 4-7 5-10 2M60 70c2 4 7 5 10 2"></path>
+      <path class="cat-whisker" d="M39 67H19M40 73l-18 5M81 67h20M80 73l18 5"></path>
+      <path class="cat-paw cat-paw-left" d="M46 88c-2 7-8 8-12 3"></path>
+      <path class="cat-paw cat-paw-right" d="M74 88c2 7 8 8 12 3"></path>
+    </svg>
+  </button>
+
+  <div class="study-companion__controls" data-companion-controls>
+    <button type="button" title="陪读：轮播学习建议" class="is-active" data-companion-mode="reading">陪读</button>
+    <button type="button" title="安静：只保留猫咪" data-companion-mode="quiet">安静</button>
+    <button type="button" title="求助：打开搜索入口" data-companion-mode="help">求助</button>
+    <button type="button" aria-label="隐藏学习伙伴" data-companion-hide>×</button>
+  </div>
+</aside>
+
+<script>
+  const companion = document.querySelector('[data-study-companion]');
+  const wakeButton = document.querySelector('[data-companion-wake]');
+  const bubble = document.querySelector('[data-companion-bubble]');
+  const body = document.querySelector('[data-companion-body]');
+  const text = document.querySelector('[data-companion-text]');
+  const action = document.querySelector('[data-companion-action]');
+  const controls = document.querySelector('[data-companion-controls]');
+  const modeButtons = document.querySelectorAll('[data-companion-mode]');
+  const hideButton = document.querySelector('[data-companion-hide]');
+  const tips = [
+    { text: '第一次来？从 GPU 基础和 CUDA 开始会顺很多。', query: 'gpu cuda', action: '找入门路线' },
+    { text: '想做工程落地，可以从推理、K8s GPU、NCCL 这几个词钻进去。', query: '推理 K8s GPU NCCL', action: '搜工程线索' },
+    { text: '长文先看目录，再挑一条学习路径往下钻。', query: '学习路径', action: '找学习路径' },
+    { text: '不确定搜什么？试试 RAG、Agent 或 KV Cache。', query: 'rag agent kv cache', action: '搜热门主题' },
+  ];
+  let mode = 'reading';
+  let hidden = false;
+  let tipIndex = 0;
+  let timer = 0;
+
+  function currentTip() {
+    return tips[tipIndex % tips.length];
+  }
+
+  function actionQuery() {
+    return mode === 'help' ? 'gpu 推理 rag agent' : currentTip().query;
+  }
+
+  function render() {
+    if (!companion || !text || !action || !body || !controls || !wakeButton || !bubble) return;
+    companion.classList.toggle('study-companion--hidden', hidden);
+    companion.classList.toggle('is-reading', !hidden && mode === 'reading');
+    companion.classList.toggle('is-quiet', !hidden && mode === 'quiet');
+    companion.classList.toggle('is-help', !hidden && mode === 'help');
+    wakeButton.hidden = !hidden;
+    bubble.hidden = hidden || mode === 'quiet';
+    body.hidden = hidden;
+    controls.hidden = hidden;
+
+    const tip = currentTip();
+    text.textContent = mode === 'help'
+      ? '我可以帮你把问题变成搜索词。先试试 GPU、推理、RAG、Agent 这些入口。'
+      : tip.text;
+    action.textContent = mode === 'help' ? '打开搜索' : tip.action;
+    body.setAttribute('aria-label', mode === 'quiet' ? '进入陪读模式' : '进入求助模式');
+    modeButtons.forEach(button => {
+      button.classList.toggle('is-active', button.dataset.companionMode === mode);
+    });
+  }
+
+  function persist() {
+    localStorage.setItem('studyCompanionHidden', String(hidden));
+    localStorage.setItem('studyCompanionMode', mode);
+  }
+
+  function startTimer() {
+    window.clearInterval(timer);
+    if (hidden || mode !== 'reading') return;
+    timer = window.setInterval(() => {
+      tipIndex = (tipIndex + 1) % tips.length;
+      render();
+    }, 8000);
+  }
+
+  function switchMode(nextMode) {
+    mode = nextMode;
+    hidden = false;
+    persist();
+    render();
+    startTimer();
+  }
+
+  action?.addEventListener('click', () => {
+    window.__openSiteSearch?.(actionQuery());
+  });
+
+  body?.addEventListener('click', () => {
+    switchMode(mode === 'quiet' ? 'reading' : 'help');
+  });
+
+  wakeButton?.addEventListener('click', () => {
+    switchMode('reading');
+  });
+
+  hideButton?.addEventListener('click', () => {
+    hidden = true;
+    persist();
+    render();
+    startTimer();
+  });
+
+  modeButtons.forEach(button => {
+    button.addEventListener('click', () => switchMode(button.dataset.companionMode || 'reading'));
+  });
+
+  hidden = localStorage.getItem('studyCompanionHidden') === 'true';
+  const savedMode = localStorage.getItem('studyCompanionMode');
+  if (savedMode === 'quiet' || savedMode === 'help' || savedMode === 'reading') mode = savedMode;
+  render();
+  startTimer();
+</script>

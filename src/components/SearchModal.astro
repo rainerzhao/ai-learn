@@ -1,0 +1,280 @@
+---
+import { withBase } from '../lib/paths';
+
+const pagefindScriptSrc = withBase('/pagefind/pagefind.js');
+const basePath = import.meta.env.BASE_URL ?? '/';
+---
+
+<button
+  type="button"
+  data-site-search-button
+  class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors"
+  style="color: var(--text-secondary); background: var(--bg-secondary); border: 1px solid var(--border);"
+  aria-label="搜索"
+>
+  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  </svg>
+  <span class="hidden sm:inline">搜索</span>
+  <kbd class="hidden sm:inline text-[10px] px-1.5 py-0.5 rounded" style="background: var(--bg-card); border: 1px solid var(--border);">⌘K</kbd>
+</button>
+
+<div
+  id="site-search-modal"
+  class="fixed inset-0 z-[100] flex items-start justify-center pt-[13vh] px-4"
+  style="background: var(--modal-overlay); backdrop-filter: blur(4px);"
+  hidden
+>
+  <div
+    id="site-search-panel"
+    class="w-full max-w-2xl rounded-lg shadow-2xl overflow-hidden"
+    style="background: var(--bg-card); border: 1px solid var(--border);"
+  >
+    <div class="flex items-center gap-3 px-4 py-3 border-b" style="border-color: var(--border); background: var(--bg-secondary);">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--text-muted);" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input
+        id="pagefind-search-input"
+        type="text"
+        placeholder="搜索文章..."
+        class="flex-1 bg-transparent outline-none text-base"
+        style="color: var(--text-primary);"
+        autocomplete="off"
+      />
+      <kbd class="text-[10px] px-1.5 py-0.5 rounded" style="background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-muted);">ESC</kbd>
+    </div>
+    <div id="pagefind-search-results" class="max-h-[60vh] overflow-y-auto p-2">
+      <div data-search-state="idle" class="px-4 py-5">
+        <div class="text-sm mb-3" style="color: var(--text-muted);">
+          输入关键词搜索文章，或者先从这些入口开始：
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {['gpu', 'cuda', '推理', 'rag', 'agent', 'kv cache'].map(item => (
+            <button
+              type="button"
+              data-search-chip={item}
+              class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]"
+              style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);"
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="site-search-idle-template">
+  <div data-search-state="idle" class="px-4 py-5">
+    <div class="text-sm mb-3" style="color: var(--text-muted);">
+      输入关键词搜索文章，或者先从这些入口开始：
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" data-search-chip="gpu" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">gpu</button>
+      <button type="button" data-search-chip="cuda" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">cuda</button>
+      <button type="button" data-search-chip="推理" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">推理</button>
+      <button type="button" data-search-chip="rag" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">rag</button>
+      <button type="button" data-search-chip="agent" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">agent</button>
+      <button type="button" data-search-chip="kv cache" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">kv cache</button>
+    </div>
+  </div>
+</template>
+
+<template id="site-search-loading-template">
+  <div class="px-4 py-6" style="color: var(--text-muted);">
+    <div class="search-skeleton"></div>
+    <div class="search-skeleton search-skeleton--short"></div>
+  </div>
+</template>
+
+<template id="site-search-empty-template">
+  <div class="px-4 py-6" style="color: var(--text-muted);">
+    <div class="font-semibold mb-2" style="color: var(--text-secondary);">没有找到相关内容</div>
+    <div class="text-sm mb-3">可以换成更短的技术词，或者从热门主题重新开始。</div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" data-search-chip="gpu" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">gpu</button>
+      <button type="button" data-search-chip="推理" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">推理</button>
+      <button type="button" data-search-chip="agent" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">agent</button>
+      <button type="button" data-search-chip="rag" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="color: var(--accent); background: var(--bg-secondary); border: 1px solid var(--border);">rag</button>
+    </div>
+  </div>
+</template>
+
+<script define:vars={{ pagefindScriptSrc, basePath }}>
+  const modal = document.querySelector('#site-search-modal');
+  const panel = document.querySelector('#site-search-panel');
+  const input = document.querySelector('#pagefind-search-input');
+  const results = document.querySelector('#pagefind-search-results');
+  const idleTemplate = document.querySelector('#site-search-idle-template');
+  const loadingTemplate = document.querySelector('#site-search-loading-template');
+  const emptyTemplate = document.querySelector('#site-search-empty-template');
+  let searchTimer = 0;
+  let searchToken = 0;
+
+  async function loadPagefind() {
+    if (window.__pagefindLoading) return window.__pagefindLoading;
+    window.__pagefindLoading = import(pagefindScriptSrc).then(async module => {
+      if (module.init) await module.init();
+      if (module.options) await module.options({ language: 'zh' });
+      return module;
+    });
+    return window.__pagefindLoading;
+  }
+
+  function renderTemplate(template) {
+    if (!template || !results) return;
+    results.replaceChildren(template.content.cloneNode(true));
+  }
+
+  function setIdle() {
+    renderTemplate(idleTemplate);
+  }
+
+  function setLoading() {
+    renderTemplate(loadingTemplate);
+  }
+
+  function setError() {
+    if (!results) return;
+    results.innerHTML = '<div class="text-center py-8" style="color: var(--secondary);">搜索索引暂时不可用</div>';
+  }
+
+  function resultUrl(url) {
+    if (!url) return '/ai-learn/';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    const base = basePath || '/';
+    const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
+    const path = url.startsWith('/') ? url : `/${url}`;
+    if (!normalizedBase || normalizedBase === '/') return path;
+    if (path === normalizedBase || path.startsWith(`${normalizedBase}/`)) return path;
+    return `${normalizedBase}${path}`;
+  }
+
+  function renderResults(items) {
+    if (!results) return;
+    const list = document.createElement('div');
+    list.className = 'space-y-1';
+    for (const item of items) {
+      const link = document.createElement('a');
+      link.href = resultUrl(item.url);
+      link.className = 'block rounded-lg px-3 py-2 transition-colors hover:bg-[var(--bg-card-hover)]';
+      link.style.color = 'var(--text-primary)';
+      link.addEventListener('click', closeSearch);
+
+      const title = document.createElement('div');
+      title.className = 'text-sm font-semibold';
+      title.style.color = 'var(--accent)';
+      title.textContent = item.meta?.title || item.url;
+
+      const excerpt = document.createElement('div');
+      excerpt.className = 'mt-1 text-xs leading-5';
+      excerpt.style.color = 'var(--text-secondary)';
+      excerpt.innerHTML = item.excerpt || '';
+
+      link.append(title, excerpt);
+      list.append(link);
+    }
+    results.replaceChildren(list);
+  }
+
+  async function runSearch() {
+    const query = input?.value.trim() || '';
+    window.clearTimeout(searchTimer);
+    searchToken += 1;
+    const token = searchToken;
+
+    if (!query) {
+      setIdle();
+      return;
+    }
+
+    setLoading();
+    searchTimer = window.setTimeout(async () => {
+      try {
+        const pagefind = await loadPagefind();
+        const search = await pagefind.search(query);
+        const data = await Promise.all((search?.results || []).slice(0, 8).map(result => result.data()));
+        if (token !== searchToken) return;
+        if (data.length === 0) {
+          renderTemplate(emptyTemplate);
+          return;
+        }
+        renderResults(data);
+      } catch {
+        if (token === searchToken) setError();
+      }
+    }, 180);
+  }
+
+  function openSearch(query = '') {
+    if (!modal || !input) return;
+    modal.hidden = false;
+    document.body.classList.add('site-search-open');
+    if (query) input.value = query;
+    window.requestAnimationFrame(() => {
+      input.focus();
+      if (input.value.trim()) runSearch();
+      else setIdle();
+    });
+    void loadPagefind().catch(() => {});
+  }
+
+  function closeSearch() {
+    if (!modal || !input) return;
+    modal.hidden = true;
+    document.body.classList.remove('site-search-open');
+    input.value = '';
+    setIdle();
+  }
+
+  window.__openSiteSearch = openSearch;
+
+  document.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const searchButton = target.closest('[data-site-search-button]');
+    if (searchButton) {
+      openSearch();
+      return;
+    }
+
+    const trigger = target.closest('[data-open-site-search]');
+    if (trigger) {
+      openSearch(trigger.dataset.openSiteSearch || '');
+      return;
+    }
+
+    const chip = target.closest('[data-search-chip]');
+    if (chip && input) {
+      input.value = chip.dataset.searchChip || '';
+      runSearch();
+    }
+  });
+
+  window.addEventListener('open-site-search', event => {
+    openSearch(event.detail?.query || '');
+  });
+
+  document.addEventListener('keydown', event => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      if (modal?.hidden) openSearch();
+      else closeSearch();
+    }
+    if (event.key === 'Escape') closeSearch();
+  });
+
+  modal?.addEventListener('mousedown', event => {
+    if (panel && !panel.contains(event.target)) closeSearch();
+  });
+
+  input?.addEventListener('input', runSearch);
+
+  document.querySelectorAll('[data-site-search-button]').forEach(button => {
+    button.addEventListener('mouseenter', () => void loadPagefind().catch(() => {}), { once: true });
+    button.addEventListener('focus', () => void loadPagefind().catch(() => {}), { once: true });
+  });
+</script>

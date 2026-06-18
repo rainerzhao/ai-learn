@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroSection from '../components/HeroSection';
-import ModuleCard, { MODULE_ACCENTS } from '../components/ModuleCard';
+import HeroSection from '../components/HeroSection.astro';
+import ModuleCard from '../components/ModuleCard.astro';
 import { buildNavigation, type NavSection, type NavArticle } from '../lib/navigation';
 import { countSketches } from '../lib/knowledge-sketches';
 import { withBase } from '../lib/paths';
+import { MODULE_ACCENTS } from '../lib/module-accents';
 
 const nav = buildNavigation();
 const totalArticles = nav.reduce((sum, m) => sum + m.articleCount, 0);
@@ -70,7 +71,7 @@ function getModuleTags(mod: typeof nav[number]): string[] {
 ---
 
 <BaseLayout title="AI Fundamentals" description="完整的 AI 基础设施知识体系 — 从硬件到应用的全栈技术指南">
-  <HeroSection moduleCount={nav.length} articleCount={totalArticles} sketchCount={totalSketches} client:load />
+  <HeroSection moduleCount={nav.length} articleCount={totalArticles} sketchCount={totalSketches} />
 
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
     <div class="outcome-board">

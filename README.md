@@ -20,9 +20,9 @@
 - **270+ 个页面** — 原创深度内容，含代码示例、架构图、性能分析、专题拆解
 - **底层硬件深度专题** — 新增先进封装、SerDes、ABF/玻璃基板、NVIDIA NVL 机柜成本层级拆解
 - **持续更新机制** — 用每周知识雷达、月度专题和来源分级机制跟踪模型、硬件、推理框架和 Agent 工程变化
-- **全文搜索** — Pagefind 驱动的中文全文检索，毫秒级响应
+- **全文搜索** — Pagefind 驱动的中文全文检索，首屏不预加载搜索索引，打开搜索时再懒加载
 - **猫咪陪读与手绘卡片** — 保留轻量陪读角色和手绘知识卡片，用故事线串起 AI 架构知识
-- **SPA 级体验** — Astro View Transitions 无刷新页面切换
+- **轻量运行时** — 全站核心交互使用 Astro 静态组件和原生脚本，首屏不再加载 React runtime
 
 ## 🧭 转型路线
 
@@ -94,6 +94,9 @@ npm run dev
 # 构建静态站点（含 Pagefind 搜索索引）
 npm run build
 
+# 检查运行时资源合同（无 React runtime、无外部字体/CDN、搜索懒加载）
+npm run verify:runtime
+
 # 预览构建产物
 npm run preview
 ```
@@ -104,6 +107,7 @@ npm run preview
 
 ```bash
 npm run build
+npm run verify:runtime
 npm run preview
 ```
 
@@ -133,13 +137,13 @@ npm run preview
 
 | 层级 | 技术 |
 |------|------|
-| 框架 | Astro 6 (SSG) + React 19 |
+| 框架 | Astro 6 (SSG) |
 | 样式 | Tailwind CSS 3 + CSS 变量主题系统 |
 | 内容 | Markdown + Astro Content Collections |
 | 数学 | KaTeX (remark-math + rehype-katex) |
 | 代码 | Shiki (one-dark-pro) |
 | 搜索 | Pagefind (中文分词) |
-| 导航 | Astro View Transitions (ClientRouter) |
+| 交互 | Astro 静态组件 + 原生浏览器脚本 |
 | 部署 | GitHub Actions → GitHub Pages |
 | 大文件 | Git LFS |
 
@@ -154,7 +158,7 @@ ai-learn/
 │       └── ai_knowledge_update_workflow.md
 ├── _data/modules.yml    # 模块元数据与学习路线
 ├── src/
-│   ├── components/      # React 组件（Header、SearchModal、ModuleCard...）
+│   ├── components/      # Astro 静态组件（Header、SearchModal、ModuleCard...）
 │   ├── layouts/         # 页面布局（BaseLayout、ArticleLayout）
 │   ├── pages/           # 路由页面（首页、模块页、文章页、标签页、404）
 │   ├── lib/             # 工具库（模块解析、导航树、路径工具）

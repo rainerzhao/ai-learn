@@ -1,0 +1,26 @@
+<div
+  id="reading-progress-bar"
+  aria-hidden="true"
+  style="position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent-cool), var(--accent-warm)); z-index: 9999; transform: scaleX(0); transform-origin: left center; will-change: transform;"
+></div>
+
+<script>
+  const bar = document.getElementById('reading-progress-bar');
+  let frame = 0;
+
+  function updateReadingProgress() {
+    frame = 0;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(window.scrollY / docHeight, 1) : 0;
+    if (bar) bar.style.transform = `scaleX(${progress})`;
+  }
+
+  function scheduleReadingProgressUpdate() {
+    if (frame) return;
+    frame = window.requestAnimationFrame(updateReadingProgress);
+  }
+
+  updateReadingProgress();
+  window.addEventListener('scroll', scheduleReadingProgressUpdate, { passive: true });
+  window.addEventListener('resize', scheduleReadingProgressUpdate);
+</script>

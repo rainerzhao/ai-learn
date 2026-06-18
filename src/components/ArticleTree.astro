@@ -1,0 +1,36 @@
+---
+import type { NavSection, NavArticle } from '../lib/navigation';
+
+interface Props {
+  items: (NavSection | NavArticle)[];
+  depth?: number;
+}
+
+const { items, depth = 0 } = Astro.props;
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderItems(children: (NavSection | NavArticle)[], currentDepth: number): string {
+  const listClass = currentDepth === 0 ? 'space-y-1' : 'ml-4 mt-1 space-y-0.5';
+  const html = children.map(child => {
+    if ('children' in child && child.children.length > 0) {
+      const open = currentDepth < 1 ? ' open' : '';
+      return `<li><details${open} class="group"><summary class="article-tree__summary cursor-pointer font-medium text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--text-primary);">${escapeHtml(child.title)}</summary>${renderItems(child.children, currentDepth + 1)}</details></li>`;
+    }
+
+    const article = child as NavArticle;
+    return `<li><a href="${escapeHtml(article.href)}" class="article-tree__link block text-sm py-1 px-2 rounded transition-colors hover:bg-[var(--bg-card-hover)]" style="color: var(--text-secondary);">${escapeHtml(article.title)}</a></li>`;
+  }).join('');
+
+  return `<ul class="${listClass}">${html}</ul>`;
+}
+---
+
+<Fragment set:html={renderItems(items, depth)} />

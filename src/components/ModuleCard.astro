@@ -1,0 +1,59 @@
+---
+interface Props {
+  icon: string;
+  num: string;
+  title: string;
+  description: string;
+  href: string;
+  articleCount: number;
+  tags: string[];
+  accentColor: string;
+}
+
+const { icon, num, title, description, href, articleCount, tags, accentColor } = Astro.props;
+const accentBg = `${accentColor}1f`;
+---
+
+<a
+  href={href}
+  class="module-card group flex h-full flex-col rounded-lg p-5 transition-all duration-200 hover:-translate-y-0.5"
+  style={`--module-accent: ${accentColor}; --module-accent-bg: ${accentBg}; background: var(--bg-card); border: 1.5px solid var(--border); text-decoration: none; color: inherit;`}
+>
+  <div
+    class="h-[4px] rounded-full mb-4 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+    style="background: var(--module-accent);"
+  >
+  </div>
+  <div
+    class="grid place-items-center w-10 h-10 rounded-lg mb-3 text-2xl leading-none"
+    style="background: var(--module-accent-bg);"
+  >
+    {icon}
+  </div>
+  <div class="text-xs font-bold tracking-wider mb-1" style="color: var(--text-muted);">
+    MODULE {num}
+  </div>
+  <div class="font-bold text-base mb-2" style="color: var(--text-primary);">{title}</div>
+  <p class="text-sm leading-relaxed mb-3" style="color: var(--text-secondary);">{description}</p>
+  <div class="flex items-center justify-between mt-auto pt-3">
+    <div class="flex flex-wrap gap-1">
+      {tags.slice(0, 3).map(tag => (
+        <span
+          class="px-1.5 py-0.5 rounded text-xs font-semibold"
+          style="background: var(--module-accent-bg); color: var(--module-accent);"
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+    <span class="text-xs font-medium" style="color: var(--text-muted);">
+      {articleCount} 篇
+    </span>
+  </div>
+</a>
+
+<style>
+  .module-card:hover {
+    border-color: var(--module-accent) !important;
+  }
+</style>
