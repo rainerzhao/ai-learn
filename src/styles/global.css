@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --bg-primary: #f8fafc;
   --bg-secondary: #eef6f6;
