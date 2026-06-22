@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import 'katex/dist/katex.min.css';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { withBase } from '../lib/paths';
 import type { NavArticle } from '../lib/navigation';
@@ -31,7 +32,7 @@ function formatDate(value: string | Date | undefined): string | undefined {
 const displayDate = formatDate(date);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} showReadingProgress>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <Breadcrumbs items={breadcrumbs} />
 

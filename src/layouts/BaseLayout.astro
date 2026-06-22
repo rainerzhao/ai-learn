@@ -9,9 +9,14 @@ import { withBase } from '../lib/paths';
 interface Props {
   title: string;
   description?: string;
+  showReadingProgress?: boolean;
 }
 
-const { title, description = 'AI 基础设施知识体系 — 从硬件到应用的全栈技术指南' } = Astro.props;
+const {
+  title,
+  description = 'AI 基础设施知识体系 — 从硬件到应用的全栈技术指南',
+  showReadingProgress = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -28,7 +33,7 @@ const { title, description = 'AI 基础设施知识体系 — 从硬件到应用
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
-    <ReadingProgressBar />
+    {showReadingProgress && <ReadingProgressBar />}
     <main class="flex-1" data-pagefind-body>
       <slot />
     </main>

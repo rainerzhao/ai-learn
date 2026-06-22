@@ -218,7 +218,6 @@ const basePath = import.meta.env.BASE_URL ?? '/';
       if (input.value.trim()) runSearch();
       else setIdle();
     });
-    void loadPagefind().catch(() => {});
   }
 
   function closeSearch() {
@@ -273,8 +272,4 @@ const basePath = import.meta.env.BASE_URL ?? '/';
 
   input?.addEventListener('input', runSearch);
 
-  document.querySelectorAll('[data-site-search-button]').forEach(button => {
-    button.addEventListener('mouseenter', () => void loadPagefind().catch(() => {}), { once: true });
-    button.addEventListener('focus', () => void loadPagefind().catch(() => {}), { once: true });
-  });
 </script>

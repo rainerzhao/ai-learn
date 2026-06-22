@@ -18,12 +18,13 @@ const checks = [
       'wasm.unknown.pagefind',
       'rel="preload"',
       'rel="modulepreload"',
+      'id="reading-progress-bar"',
     ],
     present: [
       'data-open-site-search="gpu"',
-      'id="reading-progress-bar"',
       'id="site-search-modal"',
     ],
+    cssAbsent: ['KaTeX_', '.katex'],
   },
   {
     file: 'dist/01_hardware_architecture/index.html',
@@ -40,6 +41,27 @@ const checks = [
       'rel="preload"',
       'rel="modulepreload"',
     ],
+    cssAbsent: ['KaTeX_', '.katex'],
+  },
+  {
+    file: 'dist/01_hardware_architecture/advanced_packaging/01_2_5d_3d_abf_glass_substrate/index.html',
+    absent: [
+      'ClientRouter',
+      '_astro/client',
+      'React',
+      'import.meta',
+      'fonts.googleapis',
+      'fonts.gstatic',
+      'cdn.jsdelivr.net',
+      'pagefind-entry',
+      'wasm.unknown.pagefind',
+      'rel="preload"',
+      'rel="modulepreload"',
+    ],
+    present: [
+      'id="reading-progress-bar"',
+    ],
+    cssPresent: ['.katex'],
   },
   {
     file: 'dist/sketches/index.html',
@@ -56,6 +78,7 @@ const checks = [
       'rel="preload"',
       'rel="modulepreload"',
     ],
+    cssAbsent: ['KaTeX_', '.katex'],
   },
 ];
 
@@ -73,6 +96,24 @@ for (const check of checks) {
   for (const pattern of check.present ?? []) {
     if (!html.includes(pattern)) {
       failures.push(`${check.file} should contain ${pattern}`);
+    }
+  }
+
+  const linkedCss = Array.from(html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g))
+    .map(match => match[1])
+    .map(href => href.replace(/^\/ai-learn\//, 'dist/').replace(/^\//, 'dist/'))
+    .map(path => readFileSync(path, 'utf8'))
+    .join('\n');
+
+  for (const pattern of check.cssAbsent ?? []) {
+    if (linkedCss.includes(pattern)) {
+      failures.push(`${check.file} linked CSS should not contain ${pattern}`);
+    }
+  }
+
+  for (const pattern of check.cssPresent ?? []) {
+    if (!linkedCss.includes(pattern)) {
+      failures.push(`${check.file} linked CSS should contain ${pattern}`);
     }
   }
 }
