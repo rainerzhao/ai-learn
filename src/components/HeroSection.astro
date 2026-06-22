@@ -117,10 +117,10 @@ const tracks = [
 
     <div
       id="target-mode"
-      class="rounded-xl p-4 sm:p-5"
+      class="target-panel rounded-xl p-4"
       style="background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--soft-shadow);"
     >
-      <div class="flex items-center justify-between gap-3 mb-4">
+      <div class="flex items-center justify-between gap-3 mb-3">
         <div>
           <div class="text-xs font-semibold uppercase" style="color: var(--text-muted)">
             Target mode
@@ -151,7 +151,7 @@ const tracks = [
       </div>
 
       <div class="route-panel-label">按当前角色切入</div>
-      <div class="space-y-3">
+      <div class="route-list">
         {tracks.map((track, index) => (
           <a
             href={track.href}
